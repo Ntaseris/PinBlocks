@@ -15,7 +15,8 @@ def resource_path(name):
     base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
     return base / name
 
-APP_VERSION="0.32.0 Beta 1"\nHOST="127.0.0.1"; PORT=8765
+APP_VERSION="0.32.0 Beta 1"
+HOST="127.0.0.1"; PORT=8765
 state={"project":None,"root":None}
 
 def scan_project(path):

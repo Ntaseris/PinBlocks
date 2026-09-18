@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, threading, webbrowser, re, shutil
+import json, threading, webbrowser, re, shutil, secrets
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -18,6 +18,8 @@ def resource_path(name):
 APP_VERSION="0.32.0 Beta 1"
 HOST="127.0.0.1"; PORT=8765
 state={"project":None,"root":None}
+shutdown_token=secrets.token_urlsafe(24)
+server_instance=None
 
 def scan_project(path):
     p=Path(path).expanduser().resolve()
@@ -284,6 +286,11 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         p=urlparse(self.path).path; payload=self.read_json()
         try:
+            if p=="/api/shutdown":
+                if payload.get("token")!=shutdown_token:return self.send_json({"error":"Invalid shutdown token."},403)
+                self.send_json({"ok":True})
+                if server_instance: threading.Thread(target=server_instance.shutdown,daemon=True).start()
+                return
             if p=="/api/pick-folder":
                 try:
                     import platform, subprocess
@@ -327,7 +334,9 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as e:self.send_json({"error":str(e)},500)
 
 def main():
+    global server_instance
     server=ThreadingHTTPServer((HOST,PORT),Handler)
+    server_instance=server
     print(f"PinBlocks v{APP_VERSION} running at http://{HOST}:{PORT}")
     print("Leave this Terminal window open. Press Control-C to stop.")
     threading.Timer(.5,lambda:webbrowser.open(f"http://{HOST}:{PORT}")).start()

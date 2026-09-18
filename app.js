@@ -269,7 +269,9 @@ function guidedState(){
  if(!p.shot)return {step:1,title:'Create one shot',text:'Setup is complete. Now create a Shot using a real target switch. This becomes the thing the player is trying to hit.',view:'components',target:'shot'};
  if(!p.counter)return {step:2,title:'Create the 3-hit goal',text:`Create one Count Up counter for ${p.shot}. For this lesson it must start at 0 and complete at 3.`,view:'components',target:'counter'};
  if(p.cd&&((p.cd.direction||'up')!=='up'||Number(p.cd.start)!==0||Number(p.cd.complete)!==3))return {step:2,title:'Fix the counter',text:`The lesson counter is currently ${p.cd.start} → ${p.cd.complete}. Edit ${p.counter} so it Counts Up from 0 and completes at 3.`,view:'components',target:'counterEdit'};
- if(!p.rule||!p.hasAdvance||!p.hasScore)return {step:3,title:'Connect the gameplay',text:`Create one rule: WHEN ${p.shot} is made → score points AND advance ${p.counter}. Both actions are required for this lesson.`,view:'rules',target:'rule'};
+ if(!p.rule)return {step:3,title:'Connect the gameplay',text:`Create one rule: WHEN ${p.shot} is made → score points AND advance ${p.counter}.`,view:'rules',target:'createRule'};
+ if(!p.hasScore)return {step:3,title:'Add scoring',text:`Rule 1 is connected to ${p.shot}. Now add a Score points action to this same rule.`,view:'rules',target:'addScore'};
+ if(!p.hasAdvance)return {step:3,title:'Advance the counter',text:`Scoring is connected. Add another action to this same rule and choose Advance a counter → ${p.counter}.`,view:'rules',target:'addCounter'};
  return {step:4,title:'Prove it works',text:`Make ${p.shot} three times. The checklist below verifies the shot fires, score increases, and ${p.counter} reaches 3.`,view:'test',target:'test'};
 }
 function guideTrack(step,lessonComplete=false){
@@ -295,7 +297,8 @@ function guidedHighlight(){
  if(g.target==='shot')el=buttons.find(x=>x.textContent.includes('Create Shot'));
  if(g.target==='counter')el=buttons.find(x=>x.textContent.includes('Create Counter'));
  if(g.target==='counterEdit'){let p=guidedLessonParts(),card=[...document.querySelectorAll('.card')].find(x=>x.textContent.includes(p.counter));el=card?[...card.querySelectorAll('button')].find(x=>x.textContent.trim()==='Edit'):null}
- if(g.target==='rule')el=buttons.find(x=>x.textContent.includes('Create Rule'));
+ if(g.target==='createRule')el=buttons.find(x=>x.textContent.includes('Create Rule'));
+ if(g.target==='addScore'||g.target==='addCounter'){let p=guidedLessonParts();el=buttons.find(x=>x.textContent.includes(p.rule?.actions?.length?'Add another action':'Add the first action'));}
  if(g.target==='test'){let p=guidedLessonParts();el=buttons.find(x=>x.classList.contains('testInput')&&x.textContent.includes('MAKE SHOT')&&x.textContent.includes(p.shot));}
  if(el){el.classList.add('guidedNext');el.title='Do this next';}
 }

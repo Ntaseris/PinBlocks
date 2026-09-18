@@ -24,11 +24,11 @@ if asset_dir.is_dir():
             assets.append((str(p), str(p.parent.relative_to(ROOT))))
 
 a=Analysis(
-    ["pinblocks_launcher.py"],
+    ["pinblocks_app.py"],
     pathex=[str(ROOT)],
     binaries=[],
     datas=assets,
-    hiddenimports=["yaml","mpf_project_reader"],
+    hiddenimports=["yaml","mpf_project_reader","webview"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

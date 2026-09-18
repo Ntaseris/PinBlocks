@@ -1,0 +1,2 @@
+PyYAML>=6,<7
+pyinstaller>=6.10,<7

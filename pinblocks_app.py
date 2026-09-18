@@ -273,6 +273,11 @@ class Handler(BaseHTTPRequestHandler):
         elif name.endswith(".js"):ctype="application/javascript; charset=utf-8"
         elif name.endswith(".png"):ctype="image/png"
         self.send_response(200); self.send_header("Content-Type",ctype)
+        # PinBlocks runs on a fixed localhost URL. Never let the browser reuse JS/CSS
+        # from a previous desktop build at 127.0.0.1:8765.
+        self.send_header("Cache-Control","no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma","no-cache")
+        self.send_header("Expires","0")
         self.send_header("Content-Length",str(len(data))); self.end_headers(); self.wfile.write(data)
     def do_POST(self):
         p=urlparse(self.path).path; payload=self.read_json()

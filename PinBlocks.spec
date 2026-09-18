@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 from pathlib import Path
+import platform
 
 ROOT=Path(SPECPATH)
 assets=[
@@ -42,6 +43,7 @@ exe=EXE(
     [],
     exclude_binaries=True,
     name="PinBlocks",
+    icon=str(ROOT/"assets"/("pinblocks-icon.ico" if platform.system()=="Windows" else "pinblocks-icon.png")),
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -57,7 +59,6 @@ coll=COLLECT(
     upx_exclude=[],
     name="PinBlocks",
 )
-import platform
 if platform.system()=="Darwin":
     app=BUNDLE(
         coll,

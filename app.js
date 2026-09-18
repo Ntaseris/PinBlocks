@@ -71,6 +71,9 @@ function refreshModes(){
  document.getElementById('modeSelect').innerHTML=`<option value="">Choose a mode…</option>`+names.map(n=>`<option ${n===currentMode?'selected':''}>${esc(n)}</option>`).join('');
 }
 function projectHome(){
+ // Returning home always leaves the guided lesson. Tutorial state must never
+ // leak into an existing/imported mode.
+ tutorialActive=false;
  let status=document.getElementById('loadStatus');if(status)status.textContent='Project loaded.';
  currentMode=null;currentView='settings';
  document.getElementById('modeSelect').value='';
@@ -96,6 +99,8 @@ async function openHomeMode(){
  await loadExistingMode(e.value);
 }
 async function loadExistingMode(n){
+ // Existing modes are read-only sandboxes, never tutorial exercises.
+ tutorialActive=false;
  try{
    let d=await api('/api/import-mode',{name:n});
    if(d.error)return alert(d.error);
@@ -298,8 +303,9 @@ function guideTrack(step,lessonComplete=false){
 function tutorialPanel(){
  let g=guidedState();if(!g)return '';
  let complete=g.step===4&&typeof guidedTestData==='function'&&!!guidedTestData()?.success;
- return `<div class=guidedPanel id=guidedPanel>${guideTrack(g.step,complete)}<div class=guideLesson><div><div class=guideEyebrow>GUIDED BUILD · STEP ${g.step} OF 4</div><h3>${complete?'Your first mode works!':g.title}</h3><p>${complete?'Test complete. The shot fires, scoring works, and the counter reached its goal.':g.text}</p></div><button class=guideExit onclick="tutorialActive=false;render()">Exit guide</button></div></div>`;
+ return `<div class=guidedPanel id=guidedPanel>${guideTrack(g.step,complete)}<div class=guideLesson><div><div class=guideEyebrow>GUIDED BUILD · STEP ${g.step} OF 4</div><h3>${complete?'Your first mode works!':g.title}</h3><p>${complete?'Test complete. The shot fires, scoring works, and the counter reached its goal.':g.text}</p></div><button class=guideExit onclick="exitTutorial()">Exit guide</button></div></div>`;
 }
+function exitTutorial(){tutorialActive=false;currentView='settings';render()}
 function refreshTutorialPanel(){
  let el=document.getElementById('guidedPanel');if(!el)return;
  let html=tutorialPanel(),box=document.createElement('div');box.innerHTML=html;

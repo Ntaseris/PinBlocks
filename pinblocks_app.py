@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, threading, webbrowser, re, shutil, secrets
+import re, shutil
 from datetime import datetime
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
-from urllib.parse import urlparse
 import yaml
 from mpf_project_reader import MPFProjectReader
 
@@ -16,10 +14,7 @@ def resource_path(name):
     return base / name
 
 APP_VERSION="0.32.0 Beta 1"
-HOST="127.0.0.1"; PORT=8765
 state={"project":None,"root":None}
-shutdown_token=secrets.token_urlsafe(24)
-server_instance=None
 
 def scan_project(path):
     p=Path(path).expanduser().resolve()

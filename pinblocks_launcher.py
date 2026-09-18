@@ -4,7 +4,7 @@ import webbrowser
 import socket
 import json
 import urllib.request
-from pinblocks_app import ThreadingHTTPServer, Handler, HOST, PORT, APP_VERSION
+from pinblocks_app import ThreadingHTTPServer, Handler, HOST, PORT, APP_VERSION, shutdown_token
 
 def server_info():
     try:
@@ -23,6 +23,24 @@ def wait_and_open():
         except OSError:
             time.sleep(.1)
 
+def quit_ui():
+    """On macOS, keep a tiny native Quit control open while PinBlocks runs."""
+    import platform, subprocess
+    if platform.system() != "Darwin":
+        return
+    script = 'display dialog "PinBlocks is running in your browser." buttons {"Quit PinBlocks"} default button "Quit PinBlocks" with title "PinBlocks"'
+    subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
+    try:
+        req = urllib.request.Request(
+            f"http://{HOST}:{PORT}/api/shutdown",
+            data=json.dumps({"token": shutdown_token}).encode(),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        urllib.request.urlopen(req, timeout=1).read()
+    except Exception:
+        pass
+
 def main():
     try:
         server=ThreadingHTTPServer((HOST,PORT),Handler)
@@ -40,6 +58,7 @@ def main():
             raise RuntimeError("Port 8765 is already in use by another application.")
         raise
     threading.Thread(target=wait_and_open,daemon=True).start()
+    threading.Thread(target=quit_ui,daemon=True).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:

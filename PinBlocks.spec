@@ -62,7 +62,7 @@ if platform.system()=="Darwin":
     app=BUNDLE(
         coll,
         name="PinBlocks.app",
-        icon=None,
+        icon=str(ROOT/"assets"/"pinblocks-icon.icns"),
         bundle_identifier="com.houseballamusements.pinblocks",
         info_plist={
             "CFBundleName":"PinBlocks",

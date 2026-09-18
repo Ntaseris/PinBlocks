@@ -73,7 +73,7 @@ function refreshModes(){
 function projectHome(){
  // Returning home always leaves the guided lesson. Tutorial state must never
  // leak into an existing/imported mode.
- tutorialActive=false;
+ tutorialActive=false;guidedModeName=null;
  let status=document.getElementById('loadStatus');if(status)status.textContent='Project loaded.';
  currentMode=null;currentView='settings';
  document.getElementById('modeSelect').value='';
@@ -100,7 +100,7 @@ async function openHomeMode(){
 }
 async function loadExistingMode(n){
  // Existing modes are read-only sandboxes, never tutorial exercises.
- tutorialActive=false;
+ tutorialActive=false;guidedModeName=null;
  try{
    let d=await api('/api/import-mode',{name:n});
    if(d.error)return alert(d.error);
@@ -114,6 +114,8 @@ async function loadExistingMode(n){
  }catch(e){alert('Could not import mode: '+(e.message||e))}
 }
 function switchMode(n){
+ // Tutorial state belongs only to the specific guided practice mode.
+ if(tutorialActive&&n!==guidedModeName)tutorialActive=false;
  if(!n||!spaces[n])return projectHome();
  if(!spaces[n].isNew&&!spaces[n].imported){loadExistingMode(n);return}
  currentMode=n;
@@ -130,11 +132,11 @@ function openModeWizard(){
  if(!tutorialActive)tutorialActive=false;
  wmName.value=tutorialActive?nextGuidedModeName():'target_practice';wmStart.value='ball_started';wmStop.value='ball_ended';wmPriority.value=100;wmVersion.value=detectVersion();modeModal.style.display='flex'
 }
-function openFreeModeWizard(){tutorialActive=false;openModeWizard()}
+function openFreeModeWizard(){tutorialActive=false;guidedModeName=null;openModeWizard()}
 function detectVersion(){return 6}
 function wizardStartChoice(){if(wmStartChoice.value!=='custom')wmStart.value=wmStartChoice.value;else wmStart.value='start_my_mode'}
 function wizardStopChoice(){if(wmStopChoice.value!=='custom')wmStop.value=wmStopChoice.value;else wmStop.value='stop_my_mode'}
-function createMode(){let n=wmName.value.trim().replace(/\s+/g,'_');if(!n)return alert('Give the mode a name.');if(spaces[n])return alert('That mode already exists.');let w=blank(n,true);w.settings={start:wmStart.value.trim(),stop:wmStop.value.trim(),priority:Number(wmPriority.value||100),version:Number(wmVersion.value||6)};spaces[n]=w;currentMode=n;modeModal.style.display='none';
+function createMode(){let n=wmName.value.trim().replace(/\s+/g,'_');if(!n)return alert('Give the mode a name.');if(spaces[n])return alert('That mode already exists.');if(tutorialActive)guidedModeName=n;let w=blank(n,true);w.settings={start:wmStart.value.trim(),stop:wmStop.value.trim(),priority:Number(wmPriority.value||100),version:Number(wmVersion.value||6)};spaces[n]=w;currentMode=n;modeModal.style.display='none';
 document.getElementById('empty').style.display='none';document.getElementById('work').style.display='block';document.getElementById('builderNav').style.display='block';refreshModes();
 if(tutorialActive){view('components');setTimeout(guidedHighlight,0);return;}
 view('settings')}
@@ -273,9 +275,9 @@ function triggerText(b){
 }
 function trig(b){if(b.type==='switch')return b.value+'_active';if(b.type==='event')return b.value;if(b.type==='counter_complete')return ws().counters[b.value]?.event||b.value+'_complete';if(b.type==='timer_complete')return ws().timers[b.value]?.event||'timer_'+b.value+'_complete';if(b.type==='shot')return b.value+'_hit';return''}
 function renderOverview(){let w=ws(),sn=Object.keys(w.shots||{}),cn=Object.keys(w.counters||{}),tn=Object.keys(w.timers||{}),rs=w.rules||[];let chips=[...sn.map(x=>`<span class=flowChip>SHOT · ${esc(x)}</span>`),...cn.map(x=>`<span class=flowChip>COUNTER · ${esc(x)}</span>`),...tn.map(x=>`<span class=flowChip>TIMER · ${esc(x)}</span>`)].join('');let lines=rs.length?rs.map((r,i)=>`<div class=overviewLine><span class=flowNum>${i+1}</span><div><b>${esc(triggerText(r.trigger))}</b><span class=flowArrow>→</span>${r.actions.length?r.actions.map(a=>esc(actionText(a))).join(' · '):'No action yet'}</div></div>`).join(''):'<div class=small>No rules yet.</div>';return `<h2>Mode Overview</h2><p class=small>Read the mode like gameplay, not configuration.</p><div class=modeOverview><h3>Pieces in this mode</h3><div class=flowChips>${chips||'<span class=small>No components yet.</span>'}</div></div><div class=modeOverview><h3>What happens</h3>${lines}</div><p class=small>Advanced imported MPF may contain additional behavior outside this summary.</p>`}
-let tutorialActive=false, guidedBaselineScore=0;
+let tutorialActive=false, guidedModeName=null, guidedBaselineScore=0;
 function startFirstModeTutorial(){
- tutorialActive=true;openModeWizard();
+ tutorialActive=true;guidedModeName=null;openModeWizard();
  setTimeout(()=>{let modal=document.querySelector('#modeModal .modal')||document.getElementById('modeModal');if(!modal)return;
  modal.insertAdjacentHTML('afterbegin',`<div class=tutorialCard><div class=guideEyebrow>GUIDED BUILD · START</div><h3>Build one working piece of gameplay</h3><p>You’ll connect a real switch to a shot, count 3 hits, add scoring, and prove it works in Test.</p><p class=small>PinBlocks picked an unused practice-mode name for you. You can leave it as-is.</p></div>`);},0)
 }
@@ -311,7 +313,7 @@ function tutorialPanel(){
  let complete=g.step===4&&typeof guidedTestData==='function'&&!!guidedTestData()?.success;
  return `<div class=guidedPanel id=guidedPanel>${guideTrack(g.step,complete)}<div class=guideLesson><div><div class=guideEyebrow>GUIDED BUILD · STEP ${g.step} OF 4</div><h3>${complete?'Your first mode works!':g.title}</h3><p>${complete?'Test complete. The shot fires, scoring works, and the counter reached its goal.':g.text}</p></div><button class=guideExit onclick="exitTutorial()">Exit guide</button></div></div>`;
 }
-function exitTutorial(){tutorialActive=false;currentView='settings';render()}
+function exitTutorial(){tutorialActive=false;guidedModeName=null;currentView='settings';render()}
 function refreshTutorialPanel(){
  let el=document.getElementById('guidedPanel');if(!el)return;
  let html=tutorialPanel(),box=document.createElement('div');box.innerHTML=html;

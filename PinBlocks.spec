@@ -13,10 +13,15 @@ assets=[
     ("random_generator.js","."),
     ("BETA_TESTERS.md","."),
 ]
-# Include common image assets if present.
+# Include common root image assets and everything under assets/.
 for ext in ("*.png","*.jpg","*.jpeg","*.svg","*.ico","*.icns"):
     for p in ROOT.glob(ext):
         assets.append((p.name,"."))
+asset_dir=ROOT/"assets"
+if asset_dir.is_dir():
+    for p in asset_dir.rglob("*"):
+        if p.is_file():
+            assets.append((str(p), str(p.parent.relative_to(ROOT))))
 
 a=Analysis(
     ["pinblocks_launcher.py"],

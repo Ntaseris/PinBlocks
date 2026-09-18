@@ -252,6 +252,7 @@ class Handler(BaseHTTPRequestHandler):
         return json.loads(self.rfile.read(n) or b"{}")
     def do_GET(self):
         path=urlparse(self.path).path
+        if path=="/api/app-info": return self.send_json({"app":"PinBlocks","version":APP_VERSION})
         assets={
             "/":"index.html",
             "/index.html":"index.html",
@@ -266,7 +267,7 @@ class Handler(BaseHTTPRequestHandler):
         }
         name=assets.get(path)
         if not name:return self.send_error(404)
-        file=Path(__file__).parent/name
+        file=resource_path(name)
         data=file.read_bytes()
         ctype="text/html; charset=utf-8"
         if name.endswith(".css"):ctype="text/css; charset=utf-8"

@@ -12,6 +12,7 @@ assets=[
     ("compiler.js","."),
     ("random_generator.js","."),
 ]
+# Include common image assets if present.
 for ext in ("*.png","*.jpg","*.jpeg","*.svg","*.ico","*.icns"):
     for p in ROOT.glob(ext):
         assets.append((p.name,"."))
@@ -29,9 +30,27 @@ a=Analysis(
     noarchive=False,
 )
 pyz=PYZ(a.pure)
-exe=EXE(pyz,a.scripts,[],exclude_binaries=True,name="PinBlocks",debug=False,bootloader_ignore_signals=False,strip=False,upx=False,console=False)
-coll=COLLECT(exe,a.binaries,a.datas,strip=False,upx=False,upx_exclude=[],name="PinBlocks")
-
+exe=EXE(
+    pyz,
+    a.scripts,
+    [],
+    exclude_binaries=True,
+    name="PinBlocks",
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=False,
+    console=False,
+)
+coll=COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name="PinBlocks",
+)
 import platform
 if platform.system()=="Darwin":
     app=BUNDLE(

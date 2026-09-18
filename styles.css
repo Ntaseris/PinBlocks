@@ -1,0 +1,222 @@
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f5f2;color:#181818}
+header{height:64px;background:#181818;color:white;display:flex;align-items:center;padding:0 22px;gap:18px}header b{font-size:22px}header span{opacity:.65}
+.app{display:grid;grid-template-columns:270px minmax(600px,1fr) 330px;height:calc(100vh - 64px);min-height:0;align-items:stretch}
+aside,.right{background:#fff;padding:18px;overflow:auto;min-height:0}aside{border-right:1px solid #ddd}.right{border-left:1px solid #ddd}
+main{padding:22px;overflow:auto;min-height:0}.workspace{max-width:840px;margin:0 auto}
+button{border:0;border-radius:7px;padding:10px 12px;font-weight:700;cursor:pointer}input,select{width:100%;padding:9px;border:1px solid #bbb;border-radius:6px;background:white;font-size:14px}
+.primary{width:100%;background:#181818;color:white}.muted{background:#e9e9e4}.status{font-size:13px;color:#555;margin:10px 0}
+.stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px}
+h4{font-size:11px;letter-spacing:.1em;color:#777;margin:20px 0 8px}.nav button,.palette button{width:100%;text-align:left;margin:4px 0;background:#ecece7}
+.nav button.active{background:#181818;color:#fff}.trigger{border-left:5px solid #555}.action{border-left:5px solid #aaa}
+.empty{text-align:center;margin-top:100px;color:#777}.badge{display:inline-block;padding:3px 8px;border-radius:20px;background:#e5e5e1;font-size:11px}
+.headerrow{display:flex;justify-content:space-between;align-items:flex-start}.headerrow h2{margin:4px 0}
+.card{background:white;border:1px solid #d8d8d3;border-radius:10px;padding:15px;margin:12px 0}.hint{background:#eeeeea;border-radius:8px;padding:11px;font-size:12px;line-height:1.5}
+.grid3{display:grid;grid-template-columns:1fr 1fr 110px;gap:10px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:11px;font-weight:bold;color:#777}.field{margin-top:8px}.field input,.field select{margin-top:5px}.help{font-size:11px;color:#777;line-height:1.4;margin-top:4px}
+.rule{margin:16px 0}.rulehead{display:flex;justify-content:space-between;align-items:center;background:#e9e9e4;border-radius:8px;padding:9px 11px;cursor:pointer}.rulehead .summary{font-size:12px;color:#666;margin-left:10px}.rulebody{padding-top:9px}
+.node{background:#fff;border:2px solid #222;border-radius:11px;padding:14px;position:relative}.node .kind{font-size:11px;font-weight:bold;letter-spacing:.09em;color:#777;margin-bottom:9px}.node .x{position:absolute;right:7px;top:5px;background:transparent;color:#999}
+.arrow{text-align:center;font-size:22px;padding:3px}.add{text-align:center;margin:7px}.add button{background:#e5e5df}
+.component{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.component h3{margin:0 0 3px;font-size:16px}.component p{margin:0;font-size:12px;color:#666}
+.tabs{display:flex;gap:7px;margin-top:20px}.tabs button{background:#e7e7e2}.tabs .active{background:#181818;color:white}
+pre{white-space:pre-wrap;background:#181818;color:#f5f5f2;border-radius:8px;padding:14px;min-height:140px}
+.testbar{display:flex;gap:8px;align-items:center;margin:12px 0}.testbar button{background:#181818;color:#fff}
+.testgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.testbox{background:white;border:1px solid #ddd;border-radius:9px;padding:14px}.testbuttons button{display:block;width:100%;margin:6px 0;background:#ecece7;text-align:left}
+.log{font-family:monospace;font-size:12px;max-height:230px;overflow:auto;background:#181818;color:#eee;padding:10px;border-radius:7px}.state div{padding:5px 0;border-bottom:1px solid #eee;font-size:13px}
+.modalbg{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center;z-index:20}.modal{background:white;width:470px;padding:22px;border-radius:12px}.modal h2{margin-top:0}.modalBtns{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.modalBtns button:last-child{background:#181818;color:white}
+.small{font-size:12px;color:#666;line-height:1.5}.learn h3{margin-top:5px}
+
+.steps button{width:100%;text-align:left;margin:5px 0;background:#ecece7;padding:12px}.steps button.active{background:#181818;color:#fff}.steps small{display:block;font-weight:normal;opacity:.65;margin-top:3px}.wizardbox{border:2px dashed #bbb;border-radius:10px;padding:18px;text-align:center;margin-top:16px}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choicegrid button{text-align:left;background:#ecece7;padding:14px}.choicegrid small{display:block;font-weight:normal;color:#666;margin-top:3px}.nextbtn{margin-top:18px;background:#181818;color:#fff}.exportBtns{display:flex;gap:8px;margin:12px 0}.exportBtns button{background:#181818;color:#fff}.check{padding:7px 0;border-bottom:1px solid #eee;font-size:13px}
+
+.componentActions,.ruleTools,.actionTools{display:flex;gap:6px}.componentActions button,.ruleTools button,.actionTools button{padding:6px 9px;font-size:11px}
+.danger{background:#efe4e4!important}.validation{margin:12px 0}.issue{padding:9px 11px;border-radius:7px;background:#f1ece2;margin:6px 0;font-size:12px}.issue.ok{background:#e7eee7}
+.actionTools{justify-content:flex-end;margin-top:8px}
+
+.health{margin:0 0 14px;padding:10px 13px;border-radius:8px;background:#e7eee7;border:1px solid #cfd9cf;font-size:12px;cursor:pointer}
+.health.warn{background:#f3eee3;border-color:#ded1b7}.health.error{background:#f2e3e3;border-color:#dfbcbc}
+.healthDetails{margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,.12)}.healthDetails div{margin:5px 0}
+.numrow{display:grid;grid-template-columns:42px 1fr 42px;gap:7px;align-items:center}.numrow button{padding:10px 0;font-size:18px;font-weight:bold}.numrow input{text-align:center;font-size:16px}
+.simRule{margin:8px 0;padding:10px;border:1px solid #ccc;border-radius:8px}.simRule.firing{outline:3px solid #555;background:#eee}.simNode{margin:5px 0;padding:7px;border-radius:6px;background:#f6f6f3}.simNode.firing{outline:3px solid #777}
+.debugError{padding:12px;background:#f2e3e3;border:1px solid #d7aaaa;border-radius:8px}
+
+.projectHome{max-width:760px;margin:20px auto}.projectHome h2{font-size:30px;margin-bottom:6px}
+.projectSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.projectSummary div{padding:14px;border:1px solid #ddd;border-radius:9px;background:#fff}.projectSummary b{display:block;font-size:24px}
+.homeChoices{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.homeChoice{padding:20px;border:1px solid #ccc;border-radius:10px;background:#fff;text-align:left}.homeChoice button{margin-top:12px}.homeModeRow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+@media(max-width:900px){.projectSummary,.homeChoices{grid-template-columns:1fr 1fr}}
+.testGroupTitle,.stateTitle{font-size:11px;font-weight:800;letter-spacing:.08em;color:#666;margin:8px 0 6px}.stateGroup{padding:9px 0;border-top:1px solid #e5e5e5}.stateRow{display:grid;grid-template-columns:minmax(120px,1fr) auto;gap:10px;padding:5px 0;align-items:center}.stateStatus{font-size:12px;background:#eee;border-radius:999px;padding:3px 7px}.traceRule{border:1px solid #ddd;border-radius:8px;padding:10px 12px;margin:7px 0}.traceRule.fired{border-color:#111;background:#f1f1f1}.traceActions{font-size:12px;color:#666;margin-top:5px}
+.traceTrigger{font-weight:800;margin-top:5px}.traceStep{margin-top:6px;padding-left:16px;position:relative;font-size:13px}.traceStep:before{content:'↓';position:absolute;left:1px;color:#777}.traceEvent{margin-top:6px;font-size:12px;color:#555}.randomNote{border:1px solid #ddd;border-radius:8px;padding:10px 12px;margin:10px 0;background:#fafafa}
+.randomChoices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.randomChoice{border:1px solid #ddd;border-radius:8px;padding:10px}.randomChoice label{display:flex;gap:8px;align-items:center;font-weight:700}.randomResult{border:1px solid #bbb;border-radius:10px;padding:14px;margin-top:12px;background:#fafafa}.pillrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.miniPill{font-size:11px;background:#eee;border-radius:999px;padding:4px 7px}.stateTrack{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}.stateNode{border:1px solid #ccc;border-radius:999px;padding:5px 9px;font-size:12px;background:#fff}.stateNode.active{background:#171717;color:#fff;border-color:#171717}.stateArrow{color:#777}.progressBox{border:1px solid #ddd;border-radius:8px;padding:10px;margin-top:10px;background:#fafafa}.connectionRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:9px}.advancedEvent{margin-top:7px}.connectionPreview{font-size:12px;margin-top:6px;color:#555}
+.modal{max-height:calc(100vh - 40px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+.modal>div:not(.modalActions){min-height:0}
+#modalBody{overflow-y:auto;min-height:0;padding-right:4px}
+.modalActions{position:sticky;bottom:-1px;background:#fff;border-top:1px solid #ddd;padding:12px 0 2px;margin-top:12px;z-index:20}
+.behaviorCard{border:1px solid #ddd;border-radius:9px;padding:12px;margin-top:10px;background:#fafafa}
+.behaviorCard h4{margin:0 0 5px}.behaviorChoice{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.gameplayFields{margin-top:10px;padding-top:10px;border-top:1px solid #ddd}
+.advancedPanel{margin-top:10px;border-top:1px solid #ddd;padding-top:8px}
+.levelPill{font-size:10px;background:#e9e9e9;border-radius:999px;padding:3px 7px;margin-left:5px}
+
+.importBanner details{margin-top:8px}.importBanner ul{margin:8px 0 0 20px;padding:0}.importBanner li{margin:4px 0}
+
+.brandLockup{display:flex;align-items:center;gap:8px}.brandLockup .byline{font-size:10px;opacity:.55;text-transform:uppercase;letter-spacing:.08em}.brandLockup img{height:52px;width:auto;max-width:245px;object-fit:contain}
+.referenceGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}.referenceCard{border:1px solid #ddd;border-radius:9px;padding:13px;background:#fff}.referenceCard b{display:block;margin-bottom:6px}.referenceCard a{display:inline-block;margin-top:9px}
+.advancedEvent{overflow-wrap:anywhere}.traceRule.advancedRule .traceTrigger{font-family:inherit}.traceRule details summary{cursor:pointer;font-weight:700}.traceRule details .rawEvent{margin-top:8px;font-family:monospace;font-size:11px;overflow-wrap:anywhere}
+
+#randomBtn,.randomHero{position:relative}
+.randomMark{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border:2px solid currentColor;border-radius:7px;margin-right:8px;font-size:18px;font-weight:900;line-height:1}
+
+header .brandLockup>b{font-size:38px;letter-spacing:-.035em}
+header .brandLockup{gap:14px}
+header .brandLockup .byline{font-size:13px}
+header .brandLockup img{height:78px;width:auto;max-width:340px;object-fit:contain}
+header>span{font-size:15px}
+.randomMark{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:2px solid currentColor;border-radius:50%;margin-right:8px;font-size:17px;font-weight:900;line-height:1}
+.complexityHelp{margin-top:7px;padding:9px 11px;border-radius:7px;background:#f2f2ef;font-size:12px;line-height:1.4}
+
+header{display:grid!important;grid-template-columns:auto 1fr auto;align-items:center;gap:34px;padding:0 28px!important}
+.headerIdentity{display:flex;align-items:center;gap:30px;min-width:0}
+.pinblocksTitle{font-size:42px;font-weight:900;letter-spacing:-.045em;white-space:nowrap}
+.houseballPresented{display:flex;align-items:center;gap:11px}
+.houseballPresented>span{font-size:11px;font-weight:800;letter-spacing:.13em;opacity:.62;white-space:nowrap}
+.houseballPresented img{height:100px;width:auto;max-width:410px;object-fit:contain}
+.headerPurpose{font-size:15px;line-height:1.35;opacity:.78;max-width:390px}
+.headerVersion{font-size:13px;opacity:.55;white-space:nowrap}
+@media(max-width:1050px){.headerPurpose{display:none}header{grid-template-columns:1fr auto}.houseballPresented img{height:88px}.pinblocksTitle{font-size:36px}}
+
+header{height:96px!important;display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:32px!important;padding:0 28px!important}
+.headerTextBrand{display:flex;align-items:baseline;gap:20px}.pinblocksTitle{font-size:40px!important;font-weight:900;letter-spacing:-.045em}.builtBy{font-size:16px;font-weight:650;opacity:.82;white-space:nowrap}.headerPurpose{font-size:14px;opacity:.66}.headerVersion{font-size:12px;opacity:.48}
+.sidebarBrand{margin:28px 12px 14px;padding-top:20px;border-top:1px solid #ddd;text-align:center;font-size:11px;line-height:1.35;color:#666}.sidebarBrand img{display:block;width:225px;max-width:100%;height:auto;margin:0 auto 10px}
+.modeOverview{border:1px solid #d9d9d5;border-radius:10px;background:#fafaf8;padding:14px;margin:12px 0}.overviewLine{padding:6px 0;border-bottom:1px solid #e7e7e3}.overviewLine:last-child{border-bottom:0}
+.tutorialCard{border:2px solid #222;border-radius:10px;padding:18px;background:#fff;margin-bottom:14px}.tutorialSteps{display:grid;gap:8px;margin:12px 0}.tutorialStep{padding:10px;border-radius:8px;background:#f2f2ef}.tutorialStep b{display:block;margin-bottom:3px}
+.learnChip{font-size:11px;padding:4px 7px;margin-left:5px}.projectFinder{margin-top:12px}.projectFinder input{width:100%;margin:7px 0}.finderResults{max-height:150px;overflow:auto}
+@media(max-width:1050px){.headerPurpose{display:none}.builtBy{font-size:14px}.pinblocksTitle{font-size:34px!important}}
+
+/* v0.23.1 header cleanup */
+header{height:88px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 30px!important}
+.headerBrand{display:flex;align-items:center;gap:24px;min-width:0}
+.pinblocksTitle{font-size:38px!important;font-weight:900;letter-spacing:-.045em;line-height:1}
+.headerMeta{border-left:1px solid rgba(255,255,255,.22);padding-left:24px;display:flex;flex-direction:column;gap:3px}
+.builtBy{font-size:14px;font-weight:700;line-height:1.2;opacity:.94}
+.headerPurpose{font-size:12px;line-height:1.2;opacity:.58}
+.headerVersion{font-size:12px!important;opacity:.42!important;margin-left:auto}
+@media(max-width:900px){.headerPurpose{display:block!important}.headerMeta{padding-left:16px}.headerBrand{gap:16px}.pinblocksTitle{font-size:32px!important}}
+
+.tutorialBar{display:flex;align-items:center;gap:10px;border:2px solid #222;border-radius:10px;padding:11px 13px;margin-bottom:16px;background:#fff}.tutorialBar>div{flex:1}.tutorialBar b,.tutorialBar span,.tutorialBar small{display:block}.tutorialBar span{font-weight:800}.tutorialBar small{color:#666}.tutorialBar .quiet{background:#eee;color:#333}
+.ruleSearchBar{display:flex;align-items:center;gap:8px;margin:10px 0 14px}.ruleSearchBar input{flex:1}.ruleSearchBar span{font-size:12px;color:#666}.compactRule .rulehead{padding:7px 10px}.compactRule .rulebody{padding:7px 10px}
+.flowChips{display:flex;flex-wrap:wrap;gap:6px}.flowChip{font-size:11px;font-weight:700;padding:6px 8px;border:1px solid #ccc;border-radius:999px;background:white}.overviewLine{display:flex;gap:9px;align-items:flex-start}.flowNum{display:inline-flex;align-items:center;justify-content:center;min-width:23px;height:23px;border-radius:50%;background:#222;color:#fff;font-size:11px;font-weight:800}.flowArrow{padding:0 7px;color:#888}.selectSearch{width:100%;margin:6px 0 5px}
+
+.firstModeHero{border:2px solid #1c1c1c;border-radius:14px;padding:22px;margin:18px 0;background:#fff}.firstModeHero h2{font-size:30px;margin:3px 0 7px}.firstModeHero p{max-width:700px;font-size:15px;line-height:1.45}.firstModeHero .primary{font-size:16px;padding:12px 18px}
+.firstModePath{display:flex;align-items:center;gap:8px;margin:16px 0}.firstModePath span{border:1px solid #bbb;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800}.firstModePath b{color:#888}
+.guideEyebrow{font-size:10px;font-weight:900;letter-spacing:.1em;color:#666}.guidedPanel{border:2px solid #1c1c1c;border-radius:12px;background:#fff;margin-bottom:16px;overflow:hidden}.guideProgress{height:5px;background:#e8e8e8}.guideProgress span{display:block;height:100%;background:#1c1c1c}.guideBody{display:flex;align-items:center;gap:18px;padding:13px 14px 8px}.guideBody>div{flex:1}.guideBody h3{margin:2px 0;font-size:19px}.guideBody p{margin:0;color:#555}.guideExit{border:0!important;background:transparent!important;color:#777!important;font-size:11px!important;padding:3px 14px 10px!important;width:auto!important}.tutorialCard{border-bottom:1px solid #ddd;padding-bottom:12px;margin-bottom:12px}
+
+/* v0.25 guided lesson */
+.homeGuideTrack,.guideTrack{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:18px 0}
+.homeGuideTrack>div,.guideTrackStep{position:relative;text-align:center;padding:10px 8px;border-top:2px solid #d0d0d0}
+.homeGuideTrack span,.guideTrackStep span{display:flex;width:28px;height:28px;align-items:center;justify-content:center;border:2px solid #aaa;border-radius:50%;background:#fff;margin:-25px auto 7px;font-size:11px;font-weight:900}
+.homeGuideTrack b,.homeGuideTrack small,.guideTrackStep b{display:block}.homeGuideTrack small{font-size:10px;color:#777;margin-top:2px}
+.guideTrackStep.done,.guideTrackStep.active{border-top-color:#1c1c1c}.guideTrackStep.done span,.guideTrackStep.active span{border-color:#1c1c1c;background:#1c1c1c;color:#fff}
+.guideLesson{display:flex;align-items:center;gap:20px;padding:13px 16px 15px}.guideLesson>div{flex:1;min-width:0}.guideLesson h3{margin:2px 0 3px;font-size:20px}.guideLesson p{margin:0;line-height:1.4;color:#555}
+.guidedPanel{padding-top:18px}.guideExit{flex:0 0 auto!important}
+.guidedNext{
+  background:#2f8f46!important;
+  border-color:#2f8f46!important;
+  color:#fff!important;
+  outline:3px solid #2f8f46!important;
+  outline-offset:3px!important;
+  box-shadow:0 0 0 7px rgba(47,143,70,.16)!important;
+  font-weight:800!important;
+  animation:guidePulse 1.5s ease-in-out infinite
+}
+.guidedNext:hover{background:#277a3b!important;border-color:#277a3b!important}
+@keyframes guidePulse{
+  50%{box-shadow:0 0 0 12px rgba(47,143,70,.06)}
+}
+.modalGuide{border:2px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:12px;background:#f7f7f5}.modalGuide b{font-size:11px;letter-spacing:.07em}.modalGuide p{margin:4px 0 0;line-height:1.35}
+.guidedTestResult{border:2px solid #222;border-radius:10px;padding:13px 15px;margin:10px 0 16px;background:#fff}.guidedTestResult.success{border-width:3px}.guidedTestResult b{font-size:14px}.guidedTestResult p{margin:5px 0}
+@media(max-width:800px){.homeGuideTrack,.guideTrack{grid-template-columns:repeat(2,1fr);row-gap:20px}.guideLesson{align-items:flex-start;flex-direction:column}}
+
+.lessonChecks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.lessonCheck{display:flex;gap:9px;align-items:flex-start;border:1px solid #d5d5d5;border-radius:8px;padding:10px;background:#f5f5f3}.lessonCheck>span{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border:2px solid #aaa;border-radius:50%;font-weight:900;flex:0 0 auto}.lessonCheck b,.lessonCheck small{display:block}.lessonCheck small{color:#666;margin-top:2px}.lessonCheck.pass{border-color:#222;background:#fff}.lessonCheck.pass>span{background:#222;color:#fff;border-color:#222}.lessonSuccessActions{display:flex;gap:8px;margin-top:12px}.guidedTestResult h3{font-size:22px;margin:3px 0 5px}@media(max-width:800px){.lessonChecks{grid-template-columns:1fr}}
+
+/* v0.26.1 guided progress clarity */
+.guideTrackStep small{display:block;margin-top:3px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888}
+.guideTrackStep.done{border-top-color:#2f8f46}
+.guideTrackStep.done span{background:#2f8f46!important;border-color:#2f8f46!important;color:#fff!important;font-size:15px}
+.guideTrackStep.done b{color:#2f8f46}
+.guideTrackStep.done small{color:#2f8f46}
+.guideTrackStep.active{border-top-color:#1c1c1c}
+.guideTrackStep.active span{background:#1c1c1c!important;border-color:#1c1c1c!important;color:#fff!important}
+.guideTrackStep.active small{color:#1c1c1c}
+.guideTrackStep.future{border-top-color:#d6d6d6;color:#777}
+
+/* v0.27 gameplay-rule teaching */
+.ruleExamples{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ruleExamples span:not(.ruleFlow){background:#fff;border:1px solid #d3d3d3;border-radius:8px;padding:8px 10px}
+.ruleExamples .ruleFlow{font-size:11px;font-weight:800;color:#666;letter-spacing:.04em}
+
+/* v0.28 project folder picker */
+.projectPicker{display:grid;gap:8px;margin-bottom:8px}
+.projectPicker .primary,.projectPicker .loadProjectBtn{width:100%}
+.selectedPath{font-size:12px;line-height:1.35;word-break:break-all;padding:8px 9px;background:#f1f1ef;border-radius:7px;color:#555}
+.manualPath summary{font-size:11px;color:#666;cursor:pointer;padding:3px 0}
+.manualPath input{margin-top:6px;width:100%}
+
+/* v0.28.1 real-mode audit */
+.incompleteRule{border-style:dashed}
+.incompleteRule .summary{font-weight:700}
+
+/* v0.29 simulator */
+.testToolbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
+.testToolbar span{font-size:12px;color:#666}
+.testLayout{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(360px,1.2fr);gap:14px}
+.testInput{width:100%;text-align:left;margin:4px 0;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.testInput span{font-size:10px;letter-spacing:.08em;color:#666;font-weight:800}
+.testInput b{font-size:14px}
+.debugInput{border-style:dashed}
+.testTag{font-size:9px;border:1px solid #aaa;border-radius:10px;padding:2px 6px;margin-left:5px}
+.testHelp{font-size:11px;color:#666;margin:2px 0 6px}
+.traceCard{margin-top:14px}
+.traceHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.traceHead h3{margin-bottom:2px}
+.simTrace{background:#f6f6f4;border-radius:8px;padding:8px;min-height:90px;max-height:360px;overflow:auto}
+.traceLine{display:flex;gap:8px;margin:3px 0;padding:5px 7px 5px calc(7px + var(--depth)*18px);border-radius:5px;font-size:13px}
+.traceLine.input{background:#fff;font-weight:800;border:1px solid #d2d2d2}
+.traceLine.manual{border:1px dashed #999;background:#fff}
+.traceLine.event{font-weight:700}
+.traceLine.complete{font-weight:800}
+.traceLine.rule{font-style:italic}
+.traceMark{width:14px;flex:0 0 14px;text-align:center}
+.traceEmpty{font-size:12px;color:#777;padding:12px}
+.liveStateCard .stateRow span.stateStatus{white-space:nowrap}
+@media(max-width:900px){.testLayout{grid-template-columns:1fr}}
+
+/* v0.29.1 complex-mode Test cleanup */
+.testInputs{align-self:start;position:sticky;top:14px;max-height:calc(100vh - 40px);overflow:auto}
+.advancedTest{margin-top:14px;border-top:1px solid #ddd;padding-top:10px}
+.advancedTest summary{cursor:pointer;font-weight:800;font-size:12px;padding:7px 2px}
+.advancedTest summary span{font-weight:500;color:#777;margin-left:6px}
+.advancedTestBody{padding-top:5px}
+@media(max-width:900px){.testInputs{position:static;max-height:none;overflow:visible}}
+
+/* v0.30 light actions */
+.choiceSection{margin:18px 0 2px}
+.lightColorRow{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:8px;margin-top:8px}
+.lightColorRow label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#666}
+
+/* v0.30.1 action editing */
+.editActionFields{display:grid;gap:8px;margin:14px 0}
+.editActionFields label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#666}
+.editActionFields input,.editActionFields select{width:100%}
+
+/* v0.31 builder interaction */
+.ruleTools,.actionTools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+#editTriggerValueMount{display:grid;gap:8px}
+
+/* v0.31.1 Test UX + incomplete-rule CTA */
+.firstActionCta{background:#171717!important;color:#fff!important;border-color:#171717!important;opacity:1!important}
+.firstActionCta:hover{filter:brightness(1.15)}
+.testStatus{display:grid;grid-template-columns:1.35fr .65fr 1.35fr;gap:1px;background:#d8d8d8;border:1px solid #d8d8d8;border-radius:10px;overflow:hidden;margin:14px 0}
+.testStatus>div{background:#fff;padding:12px 14px;min-width:0}
+.statusLabel{display:block;font-size:9px;font-weight:800;letter-spacing:.1em;color:#777;margin-bottom:4px}
+.testStatus strong{font-size:13px;overflow-wrap:anywhere}
+.traceLine.input,.traceLine.manual{border-left-width:5px}
+.traceLine.complete{font-weight:800}
+@media(max-width:700px){.testStatus{grid-template-columns:1fr}.testStatus>div{padding:9px 12px}}

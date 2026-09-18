@@ -2,6 +2,7 @@ import threading
 import time
 import webbrowser
 import socket
+import sys
 from pinblocks_app import ThreadingHTTPServer, Handler, HOST, PORT
 
 def wait_and_open():
@@ -18,6 +19,7 @@ def main():
     try:
         server=ThreadingHTTPServer((HOST,PORT),Handler)
     except OSError as exc:
+        # If PinBlocks is already running, just open it.
         if getattr(exc,"errno",None) in (48,98,10048):
             webbrowser.open(f"http://{HOST}:{PORT}")
             return

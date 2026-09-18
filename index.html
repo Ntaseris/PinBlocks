@@ -1,0 +1,66 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>PinBlocks by Houseball Amusements</title>
+<link rel="stylesheet" href="/styles.css"></head>
+<body><header>
+  <div class="headerBrand">
+    <div class="pinblocksTitle">PINBLOCKS</div>
+    <div class="headerMeta">
+      <div class="builtBy">A Houseball Amusements project</div>
+      <div class="headerPurpose">Visual MPF mode builder for homebrew pinball</div>
+    </div>
+  </div>
+  <div class="headerVersion">v0.32.0 RC1</div>
+</header>
+<div class="app">
+<aside>
+<div class="projectPicker">
+<button class="primary" onclick="pickProjectFolder()">Choose Game Folder…</button>
+<div class="selectedPath" id="selectedPath">No game folder selected.</div>
+<details class="manualPath"><summary>Enter path manually</summary>
+<input id="projectPath" value="" placeholder="~/Desktop/Pinball/MyGame">
+</details>
+<button class="muted loadProjectBtn" onclick="openProject()">Load MPF Project</button>
+</div>
+<div id="status" class="status">No project loaded.</div><div id="stats"></div>
+<div id="projectNav" style="display:none">
+<button class="muted" style="width:100%;margin:4px 0 14px" onclick="projectHome()">← Project Home</button>
+<h4>OPEN EXISTING MODE</h4><select id="modeSelect" onchange="if(this.value)switchMode(this.value)"></select><button class="muted" style="width:100%;margin-top:7px" onclick="openModeWizard()">＋ Build a New Mode</button><button class="muted" style="width:100%;margin-top:7px" onclick="openRandomMode()"><span class="randomMark">?</span> Generate Random Mode</button>
+<div id="builderNav" style="display:none"><h4>BUILD YOUR MODE</h4><div class="steps">
+<button id="navSettings" onclick="view('settings')">1 · Set Up Mode<small>When does this mode run?</small></button>
+<button id="navComponents" onclick="view('components')">2 · Components<small>Shots, counters & timers</small></button>
+<button id="navRules" onclick="view('rules')">3 · Build Rules<small>WHEN something happens → DO something</small></button><button id="navOverview" onclick="view('overview')">Mode Overview<small>Gameplay in plain English</small></button>
+<button id="navTest" onclick="view('test')">4 · Test<small>Test without running MPF</small></button>
+<button id="navExport" onclick="view('export')">5 · Export<small>Review, download or install</small></button>
+<button id="navReference" onclick="view('reference')">Reference<small>MPF help and PinBlocks terms</small></button>
+</div></div></div><div class="sidebarBrand"><img src="/assets/houseball-logo.png" alt="Houseball Amusements"><div>Built for homebrew pinball builders.</div></div></aside>
+
+<main><div id="empty" class="empty"><h2>Open an MPF project</h2><p>PinBlocks uses your real switches, modes and components without changing the project.</p><p><b>Built by Houseball Amusements for the homebrew pinball community.</b> Use PinBlocks to learn MPF concepts and turn gameplay ideas into mode configuration.</p><p class="small">PinBlocks currently builds modes inside an existing MPF project rather than creating a machine project from scratch.</p></div>
+<div id="work" class="workspace" style="display:none">
+<div class="headerrow"><div><span id="modeBadge" class="badge">MODE</span><h2 id="modeTitle"></h2></div><span class="badge">READ-ONLY SANDBOX</span></div>
+<div id="content"></div>
+<pre id="yaml" style="display:none"></pre><div id="registryPane" style="display:none"></div></div></main>
+
+<section class="right learn"><h4>LEARN</h4><h3 id="learnTitle">PinBlocks</h3><p id="learnText" class="small">Build the basic pieces of an MPF mode visually. PinBlocks explains the MPF concept and compiles the pieces into YAML.</p>
+<h4>WHAT MPF GETS</h4><div id="learnYaml" class="small">Select a section or block to see how it relates to MPF config.</div>
+<h4>PROJECT SAFETY</h4><p class="small">PinBlocks only writes to your project when you explicitly use Install Mode. Existing imported modes remain protected from overwrite.</p></section>
+</div>
+
+<div id="modeModal" class="modalbg"><div class="modal"><h2>Create a Mode</h2>
+<div class="field"><label>MODE NAME</label><input id="wmName" value="target_practice"><div class="help">This will eventually become the mode folder and config name.</div></div>
+<div class="field"><label>WHEN SHOULD IT START?</label><select id="wmStartChoice" onchange="wizardStartChoice()"><option value="ball_started">At the beginning of every ball</option><option value="game_started">At game start</option><option value="custom">When another rule/event starts it</option></select><input id="wmStart" value="ball_started"><div class="help">The start event tells MPF when this mode's rules become active.</div></div>
+<div class="field"><label>WHEN SHOULD IT STOP?</label><select id="wmStopChoice" onchange="wizardStopChoice()"><option value="ball_ended">At the end of the ball</option><option value="game_ended">At game end</option><option value="custom">Custom event</option></select><input id="wmStop" value="ball_ended"><div class="help">The stop event turns this mode off.</div></div>
+<div class="grid2"><div class="field"><label>PRIORITY</label><input id="wmPriority" type="number" value="100"><div class="help">Higher-priority modes can take precedence when modes interact.</div></div><div class="field"><label>CONFIG VERSION</label><input id="wmVersion" value="6"><div class="help">PinBlocks detected/defaulted this for the project. Beginners normally should not need to change it.</div></div></div>
+<div class="modalBtns"><button onclick="modeModal.style.display='none'">Cancel</button><button onclick="createMode()">Create Mode</button></div></div></div>
+
+<div id="randomModal" class="modalbg"></div>
+<div id="componentModal" class="modalbg"><div class="modal"><h2 id="cmTitle">Create Component</h2><div id="cmFields"></div><div class="modalBtns"><button onclick="componentModal.style.display='none'">Cancel</button><button onclick="saveComponent()">Create</button></div></div></div>
+<div id="triggerModal" class="modalbg"><div class="modal"><h2>What starts this rule?</h2><p class="small">Choose the thing the player or game does first.</p><div class="choicegrid"><button onclick="chooseTrigger('switch')"><b>A switch is hit</b><small>A physical playfield switch activates.</small></button><button onclick="chooseTrigger('shot')"><b>A shot is made</b><small>A named shot you created is hit.</small></button><button onclick="chooseTrigger('counter_complete')"><b>A counter is completed</b><small>The player reaches a target number.</small></button><button onclick="chooseTrigger('timer_complete')"><b>A timer completes</b><small>A timer reaches its configured end value.</small></button><button onclick="chooseTrigger('event')"><b>An MPF event happens</b><small>Another part of the game posts an event.</small></button></div><div class="modalBtns"><button onclick="triggerModal.style.display='none'">Cancel</button></div></div></div>
+<div id="actionModal" class="modalbg"><div class="modal"><h2>What should happen?</h2><p class="small">Choose one result. You can add more actions afterward.</p><div class="choicegrid"><button onclick="chooseAction('score')"><b>Score points</b><small>Add points to the current player.</small></button><button onclick="chooseAction('advance_counter')"><b>Advance a counter</b><small>Move the counter one step toward completion.</small></button><button onclick="chooseAction('start_timer')"><b>Start a timer</b><small>Begin running a timer.</small></button><button onclick="chooseAction('stop_timer')"><b>Stop a timer</b><small>Stop it at its current value.</small></button><button onclick="chooseAction('reset_timer')"><b>Reset a timer</b><small>Return it to its start value and stop.</small></button><button onclick="chooseAction('restart_timer')"><b>Restart a timer</b><small>Reset it and run it again.</small></button><button onclick="chooseAction('post_event')"><b>Post an event</b><small>Send a message another rule can hear.</small></button></div><h3 class="choiceSection">Lights</h3><p class="small">React with a real light from this machine.</p><div class="choicegrid"><button onclick="chooseAction('light_on')"><b>Turn a light on</b><small>Use the light's normal on color.</small></button><button onclick="chooseAction('light_off')"><b>Turn a light off</b><small>Set the selected light to off.</small></button><button onclick="chooseAction('light_color')"><b>Set a light color</b><small>Choose a named or hex MPF color.</small></button><button onclick="chooseAction('light_fade')"><b>Fade a light</b><small>Smoothly change to a color over time.</small></button><button onclick="chooseAction('light_stop')"><b>Release a light</b><small>Stop holding this light so lower-priority lighting can show through.</small></button></div><div class="modalBtns"><button onclick="actionModal.style.display='none'">Cancel</button></div></div></div>
+<div id="editTriggerModal" class="modalbg"><div id="editTriggerBody" class="modal"></div></div>
+<div id="editActionModal" class="modalbg"><div id="editActionBody" class="modal"></div></div>
+<script src="/random_generator.js"></script>
+<script src="/components.js"></script>
+<script src="/validation.js"></script>
+<script src="/compiler.js"></script>
+<script src="/simulator.js"></script>
+<script src="/app.js"></script></body></html>

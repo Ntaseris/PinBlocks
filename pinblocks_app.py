@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import re, shutil
+import re, shutil, os
 from datetime import datetime
 from pathlib import Path
 import sys
@@ -282,12 +282,14 @@ class DesktopAPI:
 def main():
     import webview
     api=DesktopAPI()
-    # Let pywebview serve the local bundled page internally. Passing a file://
-    # URI to macOS WebKit can fail from a frozen PyInstaller .app bundle.
-    index=str(resource_path("index.html").resolve())
+    # Serve the bundled frontend through pywebview's lifecycle-managed internal
+    # asset server. This avoids macOS WebKit's unreliable file:// handling in a
+    # frozen .app while keeping the Python API on the direct JS bridge.
+    asset_root=resource_path(".").resolve()
+    os.chdir(asset_root)
     webview.create_window(
         f"PinBlocks — {APP_VERSION}",
-        index,
+        "index.html",
         js_api=api,
         width=1440,
         height=900,
@@ -295,6 +297,6 @@ def main():
         resizable=True,
         background_color="#f4f4f2",
     )
-    webview.start(debug=False)
+    webview.start(debug=False,http_server=True)
 
 if __name__=="__main__":main()

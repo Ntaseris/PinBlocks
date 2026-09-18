@@ -1,3 +1,4 @@
 PyYAML>=6,<7
 pyinstaller>=6.10,<7
 pywebview>=5.4,<7
+Pillow>=10,<12

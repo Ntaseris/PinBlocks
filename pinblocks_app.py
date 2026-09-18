@@ -282,7 +282,9 @@ class DesktopAPI:
 def main():
     import webview
     api=DesktopAPI()
-    index=resource_path("index.html").resolve().as_uri()
+    # Let pywebview serve the local bundled page internally. Passing a file://
+    # URI to macOS WebKit can fail from a frozen PyInstaller .app bundle.
+    index=str(resource_path("index.html").resolve())
     webview.create_window(
         f"PinBlocks — {APP_VERSION}",
         index,

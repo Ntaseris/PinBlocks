@@ -1,6 +1,6 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><title>PinBlocks by Houseball Amusements</title>
-<link rel="stylesheet" href="/styles.css"></head>
+<link rel="stylesheet" href="styles.css"></head>
 <body><header>
   <div class="headerBrand">
     <div class="pinblocksTitle">PINBLOCKS</div>
@@ -32,7 +32,7 @@
 <button id="navTest" onclick="view('test')">4 · Test<small>Test without running MPF</small></button>
 <button id="navExport" onclick="view('export')">5 · Export<small>Review, download or install</small></button>
 <button id="navReference" onclick="view('reference')">Reference<small>MPF help and PinBlocks terms</small></button>
-</div></div></div><div class="sidebarBrand"><img src="/assets/houseball-logo.png" alt="Houseball Amusements"><div>Built for homebrew pinball builders.</div></div></aside>
+</div></div></div><div class="sidebarBrand"><img src="assets/houseball-logo.png" alt="Houseball Amusements"><div>Built for homebrew pinball builders.</div></div></aside>
 
 <main><div id="empty" class="empty"><h2>Open an MPF project</h2><p>PinBlocks uses your real switches, modes and components without changing the project.</p><p><b>Built by Houseball Amusements for the homebrew pinball community.</b> Use PinBlocks to learn MPF concepts and turn gameplay ideas into mode configuration.</p><p class="small">PinBlocks currently builds modes inside an existing MPF project rather than creating a machine project from scratch.</p></div>
 <div id="work" class="workspace" style="display:none">
@@ -58,9 +58,9 @@
 <div id="actionModal" class="modalbg"><div class="modal"><h2>What should happen?</h2><p class="small">Choose one result. You can add more actions afterward.</p><div class="choicegrid"><button onclick="chooseAction('score')"><b>Score points</b><small>Add points to the current player.</small></button><button onclick="chooseAction('advance_counter')"><b>Advance a counter</b><small>Move the counter one step toward completion.</small></button><button onclick="chooseAction('start_timer')"><b>Start a timer</b><small>Begin running a timer.</small></button><button onclick="chooseAction('stop_timer')"><b>Stop a timer</b><small>Stop it at its current value.</small></button><button onclick="chooseAction('reset_timer')"><b>Reset a timer</b><small>Return it to its start value and stop.</small></button><button onclick="chooseAction('restart_timer')"><b>Restart a timer</b><small>Reset it and run it again.</small></button><button onclick="chooseAction('post_event')"><b>Post an event</b><small>Send a message another rule can hear.</small></button></div><h3 class="choiceSection">Lights</h3><p class="small">React with a real light from this machine.</p><div class="choicegrid"><button onclick="chooseAction('light_on')"><b>Turn a light on</b><small>Use the light's normal on color.</small></button><button onclick="chooseAction('light_off')"><b>Turn a light off</b><small>Set the selected light to off.</small></button><button onclick="chooseAction('light_color')"><b>Set a light color</b><small>Choose a named or hex MPF color.</small></button><button onclick="chooseAction('light_fade')"><b>Fade a light</b><small>Smoothly change to a color over time.</small></button><button onclick="chooseAction('light_stop')"><b>Release a light</b><small>Stop holding this light so lower-priority lighting can show through.</small></button></div><div class="modalBtns"><button onclick="actionModal.style.display='none'">Cancel</button></div></div></div>
 <div id="editTriggerModal" class="modalbg"><div id="editTriggerBody" class="modal"></div></div>
 <div id="editActionModal" class="modalbg"><div id="editActionBody" class="modal"></div></div>
-<script src="/random_generator.js"></script>
-<script src="/components.js"></script>
-<script src="/validation.js"></script>
-<script src="/compiler.js"></script>
-<script src="/simulator.js"></script>
-<script src="/app.js"></script></body></html>
+<script src="random_generator.js"></script>
+<script src="components.js"></script>
+<script src="validation.js"></script>
+<script src="compiler.js"></script>
+<script src="simulator.js"></script>
+<script src="app.js"></script></body></html>

@@ -15,7 +15,7 @@ def resource_path(name):
     base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
     return base / name
 
-HOST="127.0.0.1"; PORT=8765
+APP_VERSION="0.32.0 Beta 1"\nHOST="127.0.0.1"; PORT=8765
 state={"project":None,"root":None}
 
 def scan_project(path):
@@ -326,7 +326,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     server=ThreadingHTTPServer((HOST,PORT),Handler)
-    print(f"PinBlocks v0.32.0 RC1 running at http://{HOST}:{PORT}")
+    print(f"PinBlocks v{APP_VERSION} running at http://{HOST}:{PORT}")
     print("Leave this Terminal window open. Press Control-C to stop.")
     threading.Timer(.5,lambda:webbrowser.open(f"http://{HOST}:{PORT}")).start()
     try:server.serve_forever()

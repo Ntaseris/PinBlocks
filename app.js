@@ -125,7 +125,7 @@ function teach(topic){
  progression:['Shot Progression','Progression lets a shot move through states such as unlit → lit → complete.','MPF uses shot profiles and states for this.']
  }[topic];if(!x)return;document.getElementById('learnTitle').textContent=x[0];document.getElementById('learnText').textContent=x[1];document.getElementById('learnYaml').innerHTML=x[2];
 }
-function view(v){currentView=v;render()}
+function view(v){if(tutorialActive){let g=guidedState();if(g&&v==='test'&&g.step<4){currentView=g.view;render();return}}currentView=v;render()}
 function render(){
  if(!ws())return;
  try{
@@ -258,7 +258,8 @@ function startFirstModeTutorial(){
 function guidedLessonParts(){
  let w=ws(),shots=Object.keys(w?.shots||{}),counters=Object.keys(w?.counters||{});
  let shot=shots[0]||'',counter=counters[0]||'',cd=counter?w.counters[counter]:null;
- let rule=(w?.rules||[]).find(r=>r.trigger?.type==='shot'&&r.trigger.value===shot);
+ let candidates=(w?.rules||[]).filter(r=>r.trigger?.type==='shot'&&r.trigger.value===shot);
+ let rule=candidates.find(r=>r.actions?.some(x=>x.type==='score'&&Number(x.value)>0)&&r.actions?.some(x=>x.type==='advance_counter'&&x.value===counter))||candidates.find(r=>r.actions?.some(x=>x.type==='score'&&Number(x.value)>0))||candidates.find(r=>r.actions?.some(x=>x.type==='advance_counter'&&x.value===counter))||candidates[0];
  let hasAdvance=!!rule?.actions?.some(x=>x.type==='advance_counter'&&x.value===counter);
  let hasScore=!!rule?.actions?.some(x=>x.type==='score'&&Number(x.value)>0);
  return {w,shots,counters,shot,counter,cd,rule,hasAdvance,hasScore};

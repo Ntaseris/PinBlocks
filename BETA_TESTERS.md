@@ -11,23 +11,23 @@ Use a **copy or backed-up version** of your MPF project. PinBlocks is read-only 
 - **PinBlocks-Windows-x64** — 64-bit Windows
 - **PinBlocks-Linux-x64** — 64-bit Linux
 
-No Python installation or terminal is required for the packaged builds. PinBlocks starts a local server and opens your default browser at 127.0.0.1:8765.
+No Python installation or terminal is required for the packaged builds. PinBlocks opens as a standalone desktop window.
 
 ## macOS
 The beta is not yet Apple-signed/notarized, so Gatekeeper may block the first launch.
 
 If macOS offers only **Close** or **Move to Trash**, choose **Close**, then open **System Settings → Privacy & Security**, find the PinBlocks blocked-app message, and choose **Open Anyway**. Authenticate and confirm Open if prompted.
 
-If a replacement build says PinBlocks cannot be opened, quit the previous PinBlocks process first. Open **Activity Monitor**, search for **PinBlocks**, select it, and Force Quit it. Beta 1 also refuses to silently connect a new build to an older PinBlocks server.
+If a replacement build says PinBlocks cannot be opened, quit the previous PinBlocks process first. Open **Activity Monitor**, search for **PinBlocks**, select it, and Force Quit it.
 
 ## Windows
 The beta is not yet code-signed, so Microsoft Defender SmartScreen may warn that the publisher is unknown. Confirm that the file came from the official PinBlocks beta distribution, then use the Windows option to show more information and run it if you choose to continue.
 
 ## Linux
-Extract the tar.gz and run the bundled PinBlocks executable. The folder chooser uses Zenity when available. If your distribution does not include Zenity, use PinBlocks' manual project-path field.
+Extract the tar.gz and run the bundled PinBlocks executable. Use the native folder chooser to select your MPF project.
 
 ## First test
-1. Open PinBlocks and confirm your browser opens automatically.
+1. Open PinBlocks and confirm the desktop window appears.
 2. Choose a backed-up MPF game folder.
 3. Run **Build Your First Mode** from beginning to end.
 4. Confirm the Guided Build reaches **TEST ✓ COMPLETE** after the third shot.

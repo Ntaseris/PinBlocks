@@ -8,7 +8,20 @@ settings:['Mode Settings','A mode is a group of rules that becomes active when i
 test:['Test Mode','This simulator lets you fire beginner-level triggers without running the physical machine. Watch score, counters, timers and events change.']
 };
 function ws(){return spaces[currentMode]}
-async function api(path,body){let r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return await r.json()}
+async function api(path,body){
+ if(window.pywebview&&window.pywebview.api){
+   const b=body||{};
+   if(path==='/api/pick-folder')return await window.pywebview.api.pick_folder();
+   if(path==='/api/open')return await window.pywebview.api.open_project(b.path||'');
+   if(path==='/api/mode')return await window.pywebview.api.mode(b.name||'');
+   if(path==='/api/import-mode')return await window.pywebview.api.import_mode(b.name||'');
+   if(path==='/api/install-preview')return await window.pywebview.api.install_preview(b.mode||'');
+   if(path==='/api/install-mode')return await window.pywebview.api.install_mode(b.mode||'',b.yaml||'');
+   throw new Error('Unknown PinBlocks desktop API path: '+path);
+ }
+ let r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ return await r.json();
+}
 function auditGeneratedMode(){
  let d=diagnostics();
  if(d.errors.length)console.error('Generated mode has errors:',d.errors);

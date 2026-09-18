@@ -1,0 +1,50 @@
+name: Build PinBlocks Desktop
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            artifact: PinBlocks-macOS-arm64
+          - os: macos-15-intel
+            artifact: PinBlocks-macOS-intel
+          - os: windows-latest
+            artifact: PinBlocks-Windows-x64
+          - os: ubuntu-22.04
+            artifact: PinBlocks-Linux-x64
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build dependencies
+        run: python -m pip install -r requirements-build.txt
+      - name: Build
+        run: python -m PyInstaller --noconfirm --clean PinBlocks.spec
+      - name: Package macOS
+        if: runner.os == 'macOS'
+        run: ditto -c -k --sequesterRsrc --keepParent dist/PinBlocks.app "${{ matrix.artifact }}.zip"
+      - name: Package Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -Path dist\PinBlocks -DestinationPath "${{ matrix.artifact }}.zip"
+      - name: Package Linux
+        if: runner.os == 'Linux'
+        run: tar -C dist -czf "${{ matrix.artifact }}.tar.gz" PinBlocks
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            ${{ matrix.artifact }}.zip
+            ${{ matrix.artifact }}.tar.gz
+          if-no-files-found: ignore

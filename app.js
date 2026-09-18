@@ -272,16 +272,22 @@ function guidedState(){
  if(!p.rule||!p.hasAdvance||!p.hasScore)return {step:3,title:'Connect the gameplay',text:`Create one rule: WHEN ${p.shot} is made → score points AND advance ${p.counter}. Both actions are required for this lesson.`,view:'rules',target:'rule'};
  return {step:4,title:'Prove it works',text:`Make ${p.shot} three times. The checklist below verifies the shot fires, score increases, and ${p.counter} reaches 3.`,view:'test',target:'test'};
 }
-function guideTrack(step){
+function guideTrack(step,lessonComplete=false){
  let names=['SHOT','COUNTER','RULE','TEST'];
  return `<div class=guideTrack>${names.map((n,i)=>{
-   let nstep=i+1, done=nstep<step, active=nstep===step;
+   let nstep=i+1, done=nstep<step||(lessonComplete&&nstep===4), active=nstep===step&&!done;
    return `<div class="guideTrackStep ${done?'done':active?'active':'future'}"><span>${done?'✓':nstep}</span><b>${n}</b><small>${done?'Complete':active?'Current step':'Coming up'}</small></div>`;
  }).join('')}</div>`;
 }
 function tutorialPanel(){
  let g=guidedState();if(!g)return '';
- return `<div class=guidedPanel>${guideTrack(g.step)}<div class=guideLesson><div><div class=guideEyebrow>GUIDED BUILD · STEP ${g.step} OF 4</div><h3>${g.title}</h3><p>${g.text}</p></div><button class=guideExit onclick="tutorialActive=false;render()">Exit guide</button></div></div>`;
+ let complete=g.step===4&&typeof guidedTestData==='function'&&!!guidedTestData()?.success;
+ return `<div class=guidedPanel id=guidedPanel>${guideTrack(g.step,complete)}<div class=guideLesson><div><div class=guideEyebrow>GUIDED BUILD · STEP ${g.step} OF 4</div><h3>${complete?'Your first mode works!':g.title}</h3><p>${complete?'Test complete. The shot fires, scoring works, and the counter reached its goal.':g.text}</p></div><button class=guideExit onclick="tutorialActive=false;render()">Exit guide</button></div></div>`;
+}
+function refreshTutorialPanel(){
+ let el=document.getElementById('guidedPanel');if(!el)return;
+ let html=tutorialPanel(),box=document.createElement('div');box.innerHTML=html;
+ let fresh=box.firstElementChild;if(fresh)el.replaceWith(fresh);
 }
 function guidedHighlight(){
  document.querySelectorAll('.guidedNext').forEach(x=>x.classList.remove('guidedNext'));

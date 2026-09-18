@@ -108,6 +108,6 @@ function updateSim(){
  let entries=ws().sim.trace||[];
  traceEl.innerHTML=entries.length?entries.slice(-40).map(x=>`<div class="traceLine ${esc(x.kind)}" style="--depth:${Math.min(Number(x.depth)||0,5)}"><span class=traceMark>${x.kind==='input'?'▶':x.kind==='manual'?'◆':x.kind==='event'?'◆':x.kind==='complete'?'✓':x.kind==='rule'?'↳':'→'}</span><span>${esc(x.text)}</span></div>`).join(''):'<div class=traceEmpty>Nothing yet. Try a playfield input.</div>';
  if(stepEl)stepEl.textContent=entries.length?`${entries.length} trace step${entries.length===1?'':'s'}`:'Ready to test';
- refreshTutorialPanel();
- document.querySelectorAll('.traceRule').forEach(x=>x.classList.remove('fired'));for(let id of ws().sim.firedRules.slice(-3)){let e=document.getElementById('trace_'+id);if(e)e.classList.add('fired')};refreshGuidedTest()
+ document.querySelectorAll('.traceRule').forEach(x=>x.classList.remove('fired'));for(let id of ws().sim.firedRules.slice(-3)){let e=document.getElementById('trace_'+id);if(e)e.classList.add('fired')};
+ refreshGuidedTest();refreshTutorialPanel();guidedHighlight()
 }

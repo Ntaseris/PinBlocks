@@ -244,103 +244,60 @@ def install_mode(name,yaml_text):
         raise
     return {"mode":name,"mode_file":str(mode_file.relative_to(root)),"machine_config":str(cfg.relative_to(root)),"backup":str(backup.relative_to(root)) if backup else None}
 
-class Handler(BaseHTTPRequestHandler):
-    def log_message(self, fmt, *args): pass
-    def send_json(self,obj,status=200):
-        data=json.dumps(obj,default=str).encode()
-        self.send_response(status); self.send_header("Content-Type","application/json")
-        self.send_header("Content-Length",str(len(data))); self.end_headers(); self.wfile.write(data)
-    def read_json(self):
-        n=int(self.headers.get("Content-Length","0"))
-        return json.loads(self.rfile.read(n) or b"{}")
-    def do_GET(self):
-        path=urlparse(self.path).path
-        if path=="/api/app-info": return self.send_json({"app":"PinBlocks","version":APP_VERSION})
-        assets={
-            "/":"index.html",
-            "/index.html":"index.html",
-            "/styles.css":"styles.css",
-            "/app.js":"app.js",
-            "/components.js":"components.js",
-            "/validation.js":"validation.js",
-            "/simulator.js":"simulator.js",
-            "/compiler.js":"compiler.js",
-            "/random_generator.js":"random_generator.js",
-            "/assets/houseball-logo.png":"assets/houseball-logo.png",
-        }
-        name=assets.get(path)
-        if not name:return self.send_error(404)
-        file=resource_path(name)
-        data=file.read_bytes()
-        ctype="text/html; charset=utf-8"
-        if name.endswith(".css"):ctype="text/css; charset=utf-8"
-        elif name.endswith(".js"):ctype="application/javascript; charset=utf-8"
-        elif name.endswith(".png"):ctype="image/png"
-        self.send_response(200); self.send_header("Content-Type",ctype)
-        # PinBlocks runs on a fixed localhost URL. Never let the browser reuse JS/CSS
-        # from a previous desktop build at 127.0.0.1:8765.
-        self.send_header("Cache-Control","no-store, no-cache, must-revalidate, max-age=0")
-        self.send_header("Pragma","no-cache")
-        self.send_header("Expires","0")
-        self.send_header("Content-Length",str(len(data))); self.end_headers(); self.wfile.write(data)
-    def do_POST(self):
-        p=urlparse(self.path).path; payload=self.read_json()
+class DesktopAPI:
+    """Python API exposed directly to the PinBlocks desktop window."""
+    def app_info(self):
+        return {"app":"PinBlocks","version":APP_VERSION}
+
+    def pick_folder(self):
+        import webview
+        window=webview.windows[0] if webview.windows else None
+        if not window:return {"path":""}
+        result=window.create_file_dialog(webview.FileDialog.FOLDER)
+        path=""
+        if result:
+            path=result[0] if isinstance(result,(list,tuple)) else str(result)
+        return {"path":path}
+
+    def open_project(self, path=""):
+        path=(path or "").strip()
+        if not path:return {"error":"Choose an MPF project folder."}
         try:
-            if p=="/api/shutdown":
-                if payload.get("token")!=shutdown_token:return self.send_json({"error":"Invalid shutdown token."},403)
-                self.send_json({"ok":True})
-                if server_instance: threading.Thread(target=server_instance.shutdown,daemon=True).start()
-                return
-            if p=="/api/pick-folder":
-                try:
-                    import platform, subprocess
-                    system=platform.system()
-                    chosen=""
-                    if system=="Darwin":
-                        # Native Finder folder chooser without invoking a GUI toolkit
-                        # from the ThreadingHTTPServer worker thread.
-                        script='POSIX path of (choose folder with prompt "Choose your MPF game folder")'
-                        r=subprocess.run(["osascript","-e",script],capture_output=True,text=True)
-                        if r.returncode==0:
-                            chosen=r.stdout.strip()
-                        elif "User canceled" not in (r.stderr or ""):
-                            raise RuntimeError((r.stderr or "Folder chooser failed").strip())
-                    elif system=="Windows":
-                        ps=r"""Add-Type -AssemblyName System.Windows.Forms; $d=New-Object System.Windows.Forms.FolderBrowserDialog; $d.Description='Choose your MPF game folder'; if($d.ShowDialog() -eq 'OK'){Write-Output $d.SelectedPath}"""
-                        r=subprocess.run(["powershell","-NoProfile","-Command",ps],capture_output=True,text=True)
-                        if r.returncode!=0: raise RuntimeError((r.stderr or "Folder chooser failed").strip())
-                        chosen=r.stdout.strip()
-                    else:
-                        # Common Linux desktop fallback.
-                        r=subprocess.run(["zenity","--file-selection","--directory","--title=Choose your MPF game folder"],capture_output=True,text=True)
-                        if r.returncode==0: chosen=r.stdout.strip()
-                        elif r.returncode!=1: raise RuntimeError((r.stderr or "Folder chooser failed").strip())
-                    return self.send_json({"path":chosen})
-                except Exception as e:
-                    return self.send_json({"error":"Could not open the folder picker: "+str(e)},500)
-            if p=="/api/open":
-                path=payload.get("path","").strip()
-                if not path:return self.send_json({"error":"Choose an MPF project folder."},400)
-                state["project"]=scan_project(path); return self.send_json(state["project"])
-            if p=="/api/mode":
-                return self.send_json(mode_details(payload.get("name","")))
-            if p=="/api/import-mode":
-                return self.send_json(import_mode(payload.get("name","")))
-            if p=="/api/install-preview":
-                return self.send_json(preview_install(payload.get("mode","")))
-            if p=="/api/install-mode":
-                return self.send_json(install_mode(payload.get("mode",""),payload.get("yaml","")))
-            self.send_error(404)
-        except Exception as e:self.send_json({"error":str(e)},500)
+            state["project"]=scan_project(path)
+            return state["project"]
+        except Exception as e:return {"error":str(e)}
+
+    def mode(self, name=""):
+        try:return mode_details(name or "")
+        except Exception as e:return {"error":str(e)}
+
+    def import_mode(self, name=""):
+        try:return import_mode(name or "")
+        except Exception as e:return {"error":str(e)}
+
+    def install_preview(self, mode=""):
+        try:return preview_install(mode or "")
+        except Exception as e:return {"error":str(e)}
+
+    def install_mode(self, mode="", yaml=""):
+        try:return globals()["install_mode"](mode or "",yaml or "")
+        except Exception as e:return {"error":str(e)}
+
 
 def main():
-    global server_instance
-    server=ThreadingHTTPServer((HOST,PORT),Handler)
-    server_instance=server
-    print(f"PinBlocks v{APP_VERSION} running at http://{HOST}:{PORT}")
-    print("Leave this Terminal window open. Press Control-C to stop.")
-    threading.Timer(.5,lambda:webbrowser.open(f"http://{HOST}:{PORT}")).start()
-    try:server.serve_forever()
-    except KeyboardInterrupt:pass
-    finally:server.server_close()
+    import webview
+    api=DesktopAPI()
+    index=resource_path("index.html").resolve().as_uri()
+    webview.create_window(
+        f"PinBlocks — {APP_VERSION}",
+        index,
+        js_api=api,
+        width=1440,
+        height=900,
+        min_size=(1100,700),
+        resizable=True,
+        background_color="#f4f4f2",
+    )
+    webview.start(debug=False)
+
 if __name__=="__main__":main()

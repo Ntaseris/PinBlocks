@@ -10,7 +10,8 @@ assets=[
     ("validation.js","."),
     ("simulator.js","."),
     ("compiler.js","."),
-    ("random_generator.js","."),\n    ("BETA_TESTERS.md","."),
+    ("random_generator.js","."),
+    ("BETA_TESTERS.md","."),
 ]
 # Include common image assets if present.
 for ext in ("*.png","*.jpg","*.jpeg","*.svg","*.ico","*.icns"):
@@ -61,7 +62,8 @@ if platform.system()=="Darwin":
         info_plist={
             "CFBundleName":"PinBlocks",
             "CFBundleDisplayName":"PinBlocks",
-            "CFBundleShortVersionString":"0.32.0",\n            "CFBundleVersion":"1",
+            "CFBundleShortVersionString":"0.32.0",
+            "CFBundleVersion":"1",
             "NSHighResolutionCapable":True,
         },
     )

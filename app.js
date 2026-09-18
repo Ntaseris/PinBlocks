@@ -85,7 +85,7 @@ function projectHome(){
  document.getElementById('empty').innerHTML=`<span class=badge>PROJECT LOADED</span><h2>${esc(d.project_name)}</h2><p>Your machine is ready. New to PinBlocks? Start with the guided build.</p>
  <div class=firstModeHero><div class=guideEyebrow>START HERE</div><h2>Build Your First Mode</h2><p>Learn the basics by building a small working mode with the real switches in <b>${esc(d.project_name)}</b>. PinBlocks takes you through one step at a time.</p><div class=homeGuideTrack><div><span>1</span><b>SHOT</b><small>Choose a switch</small></div><div><span>2</span><b>COUNTER</b><small>Set a goal</small></div><div><span>3</span><b>RULE</b><small>Connect gameplay</small></div><div><span>4</span><b>TEST</b><small>Prove it works</small></div></div><button class=primary onclick="startFirstModeTutorial()">Start Guided Build →</button></div>
  <div class=projectSummary><div><b>${d.counts.switches}</b>switches</div><div><b>${d.counts.modes}</b>modes</div><div><b>${d.counts.counters}</b>counters</div><div><b>${d.counts.timers}</b>timers</div></div>
- <div class=homeChoices><div class=homeChoice><h3>Build Freely</h3><p class=small>Already know the basics? Start with an empty mode.</p><button onclick="openModeWizard()">＋ Build a New Mode</button><button style="margin-top:8px" onclick="openRandomMode()"><span class=randomMark>?</span> Generate Random Mode</button></div>
+ <div class=homeChoices><div class=homeChoice><h3>Build Freely</h3><p class=small>Already know the basics? Start with an empty mode.</p><button onclick="openFreeModeWizard()">＋ Build a New Mode</button><button style="margin-top:8px" onclick="openRandomMode()"><span class=randomMark>?</span> Generate Random Mode</button></div>
  <div class=homeChoice><h3>Open an Existing Mode</h3><p class=small>Explore one of your ${d.counts.modes} modes and see the parts PinBlocks recognizes.</p><div class=homeModeRow><select id=homeModeSelect><option value="">Choose a mode…</option>${Object.keys(spaces).sort().map(n=>`<option>${esc(n)}</option>`).join('')}</select><button onclick="openHomeMode()">Open</button></div></div></div>
  <div class="card projectFinder"><b>Find something in your machine</b><input id=deviceSearch placeholder="Search switches, coils, lights or modes…" oninput="searchProjectItems(this.value)"><div id=deviceSearchResults class="small finderResults">Type at least 2 letters.</div></div>
  <div class=hint style="margin-top:18px"><b>Why load your project?</b> PinBlocks uses the configuration already in your MPF project so you can build with your real machine.</div>`;
@@ -124,7 +124,13 @@ function switchMode(n){
  render();
 }
 function nextGuidedModeName(){const used=new Set(Object.keys(spaces||{}));let base='target_practice';if(!used.has(base))return base;let i=2;while(used.has(`${base}_${i}`))i++;return `${base}_${i}`;}
-function openModeWizard(){wmName.value=tutorialActive?nextGuidedModeName():'target_practice';wmStart.value='ball_started';wmStop.value='ball_ended';wmPriority.value=100;wmVersion.value=detectVersion();modeModal.style.display='flex'}
+function openModeWizard(){
+ // "Build a New Mode" is always the unrestricted builder. Guided Build turns
+ // tutorial state on explicitly before opening this wizard.
+ if(!tutorialActive)tutorialActive=false;
+ wmName.value=tutorialActive?nextGuidedModeName():'target_practice';wmStart.value='ball_started';wmStop.value='ball_ended';wmPriority.value=100;wmVersion.value=detectVersion();modeModal.style.display='flex'
+}
+function openFreeModeWizard(){tutorialActive=false;openModeWizard()}
 function detectVersion(){return 6}
 function wizardStartChoice(){if(wmStartChoice.value!=='custom')wmStart.value=wmStartChoice.value;else wmStart.value='start_my_mode'}
 function wizardStopChoice(){if(wmStopChoice.value!=='custom')wmStop.value=wmStopChoice.value;else wmStop.value='stop_my_mode'}

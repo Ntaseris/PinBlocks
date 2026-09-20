@@ -1,7 +1,7 @@
 # PinBlocks desktop distribution
 
 ## Beta 1
-Current desktop version: **v0.32.0 Beta 1**.
+Current desktop version: **v0.32.1 Beta 1**.
 
 PinBlocks is packaged as a standalone desktop application. Testers do not need Python, a terminal, or a GitHub account to run the packaged builds.
 

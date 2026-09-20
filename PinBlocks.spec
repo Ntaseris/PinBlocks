@@ -69,7 +69,7 @@ if platform.system()=="Darwin":
         info_plist={
             "CFBundleName":"PinBlocks",
             "CFBundleDisplayName":"PinBlocks",
-            "CFBundleShortVersionString":"0.32.0",
+            "CFBundleShortVersionString":"0.32.1",
             "CFBundleVersion":"1",
             "NSHighResolutionCapable":True,
         },

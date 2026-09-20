@@ -164,7 +164,7 @@ def import_mode(name):
         else:w["unsupported"].append(f'Timer "{timer}" control action "{action}" is not visualized.')
 
     counter_complete={d["event"]:n for n,d in w["counters"].items()}
-    timer_complete={f"timer_{n}_complete":n for n in w["timers"]}
+    # MPF timer completion events are timer_<name>_complete. PinBlocks-authored\n    # timers also carry an event field for its visual model; accept either form\n    # when importing so our own generated modes round-trip correctly.\n    timer_complete={f"timer_{n}_complete":n for n in w["timers"]}\n    timer_complete.update({d["event"]:n for n,d in w["timers"].items() if d.get("event")})
     shot_events={f"{n}_hit":n for n in w["shots"]}
     rid=1; bid=1
     for ev,acts in actions.items():

@@ -2,7 +2,7 @@
 
 **Visual MPF mode builder for homebrew pinball**
 
-Current release candidate: **v0.32.0 Beta 1**
+Current release candidate: **v0.32.1 Beta 1**
 
 PinBlocks is a beginner-first desktop tool for building Mission Pinball Framework gameplay modes visually. Load an MPF project, create shots, counters and timers, connect gameplay with WHEN → DO rules, simulate the logic, review the generated YAML, and optionally install the mode into a backed-up MPF project.
 

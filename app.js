@@ -127,16 +127,16 @@ function switchMode(n){
 }
 function nextGuidedModeName(){const used=new Set(Object.keys(spaces||{}));let base='target_practice';if(!used.has(base))return base;let i=2;while(used.has(`${base}_${i}`))i++;return `${base}_${i}`;}
 function openModeWizard(){
- // "Build a New Mode" is always the unrestricted builder. Guided Build turns
- // tutorial state on explicitly before opening this wizard.
- if(!tutorialActive)tutorialActive=false;
+ // Any normal "Build a New Mode" entry point must leave Guided Build.
+ // startFirstModeTutorial() sets tutorialActive immediately before opening the wizard.
+ if(!guidedModeName) tutorialActive=false;
  wmName.value=tutorialActive?nextGuidedModeName():'target_practice';wmStart.value='ball_started';wmStop.value='ball_ended';wmPriority.value=100;wmVersion.value=detectVersion();modeModal.style.display='flex'
 }
 function openFreeModeWizard(){tutorialActive=false;guidedModeName=null;openModeWizard()}
 function detectVersion(){return 6}
 function wizardStartChoice(){if(wmStartChoice.value!=='custom')wmStart.value=wmStartChoice.value;else wmStart.value='start_my_mode'}
 function wizardStopChoice(){if(wmStopChoice.value!=='custom')wmStop.value=wmStopChoice.value;else wmStop.value='stop_my_mode'}
-function createMode(){let n=wmName.value.trim().replace(/\s+/g,'_');if(!n)return alert('Give the mode a name.');if(spaces[n])return alert('That mode already exists.');if(tutorialActive)guidedModeName=n;let w=blank(n,true);w.settings={start:wmStart.value.trim(),stop:wmStop.value.trim(),priority:Number(wmPriority.value||100),version:Number(wmVersion.value||6)};spaces[n]=w;currentMode=n;modeModal.style.display='none';
+function createMode(){let n=wmName.value.trim().replace(/\s+/g,'_');if(!n)return alert('Give the mode a name.');if(!/^[A-Za-z0-9_]+$/.test(n))return alert('Mode names may contain only letters, numbers, and underscores.');if(spaces[n])return alert('That mode already exists.');if(tutorialActive)guidedModeName=n;let w=blank(n,true);w.settings={start:wmStart.value.trim(),stop:wmStop.value.trim(),priority:Number(wmPriority.value||100),version:Number(wmVersion.value||6)};spaces[n]=w;currentMode=n;modeModal.style.display='none';
 document.getElementById('empty').style.display='none';document.getElementById('work').style.display='block';document.getElementById('builderNav').style.display='block';refreshModes();
 if(tutorialActive){view('components');setTimeout(guidedHighlight,0);return;}
 view('settings')}

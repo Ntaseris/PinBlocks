@@ -1,4 +1,4 @@
-# PinBlocks v0.32.0 Beta 1
+# PinBlocks v0.32.1 Beta 1
 
 Thanks for testing PinBlocks. This beta is meant to find confusing workflows and packaging problems before a wider release.
 

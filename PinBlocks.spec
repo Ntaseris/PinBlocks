@@ -12,6 +12,7 @@ assets=[
     ("simulator.js","."),
     ("compiler.js","."),
     ("random_generator.js","."),
+    ("pinblocks_bundle.js","."),
     ("BETA_TESTERS.md","."),
 ]
 # Include common root image assets and everything under assets/.

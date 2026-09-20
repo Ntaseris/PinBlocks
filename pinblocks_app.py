@@ -13,7 +13,7 @@ def resource_path(name):
     base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
     return base / name
 
-APP_VERSION="0.32.0 Beta 1"
+APP_VERSION="0.32.1 Beta 1"
 state={"project":None,"root":None}
 
 def scan_project(path):

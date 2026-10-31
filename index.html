@@ -15,6 +15,8 @@
 <aside>
 <div class="projectPicker">
 <button class="primary" onclick="pickProjectFolder()">Choose Game Folder…</button>
+<button class="webOnly muted" onclick="loadDemoProject()">Try with a Demo Machine</button>
+<input id="browserFolderInput" class="webOnly" type="file" webkitdirectory multiple accept=".yaml,.yml" hidden>
 <div class="selectedPath" id="selectedPath">No game folder selected.</div>
 <details class="manualPath"><summary>Enter path manually</summary>
 <input id="projectPath" value="" placeholder="~/Desktop/Pinball/MyGame">
@@ -24,7 +26,7 @@
 <div id="status" class="status">No project loaded.</div><div id="stats"></div>
 <div id="projectNav" style="display:none">
 <button class="muted" style="width:100%;margin:4px 0 14px" onclick="projectHome()">← Project Home</button>
-<h4>OPEN EXISTING MODE</h4><select id="modeSelect" onchange="if(this.value)switchMode(this.value)"></select><button class="muted" style="width:100%;margin-top:7px" onclick="openModeWizard()">＋ Build a New Mode</button><button class="muted" style="width:100%;margin-top:7px" onclick="openRandomMode()"><span class="randomMark">?</span> Generate Random Mode</button>
+<h4>OPEN EXISTING MODE</h4><select id="modeSelect" onchange="if(this.value)switchMode(this.value)"></select><button class="muted" style="width:100%;margin-top:7px" onclick="openFreeModeWizard()">＋ Build a New Mode</button><button class="muted" style="width:100%;margin-top:7px" onclick="openRandomMode()"><span class="randomMark">?</span> Generate Random Mode</button>
 <div id="builderNav" style="display:none"><h4>BUILD YOUR MODE</h4><div class="steps">
 <button id="navSettings" onclick="view('settings')">1 · Set Up Mode<small>When does this mode run?</small></button>
 <button id="navComponents" onclick="view('components')">2 · Components<small>Shots, counters & timers</small></button>
@@ -58,4 +60,6 @@
 <div id="actionModal" class="modalbg"><div class="modal"><h2>What should happen?</h2><p class="small">Choose one result. You can add more actions afterward.</p><div class="choicegrid"><button onclick="chooseAction('score')"><b>Score points</b><small>Add points to the current player.</small></button><button onclick="chooseAction('advance_counter')"><b>Advance a counter</b><small>Move the counter one step toward completion.</small></button><button onclick="chooseAction('start_timer')"><b>Start a timer</b><small>Begin running a timer.</small></button><button onclick="chooseAction('stop_timer')"><b>Stop a timer</b><small>Stop it at its current value.</small></button><button onclick="chooseAction('reset_timer')"><b>Reset a timer</b><small>Return it to its start value and stop.</small></button><button onclick="chooseAction('restart_timer')"><b>Restart a timer</b><small>Reset it and run it again.</small></button><button onclick="chooseAction('post_event')"><b>Post an event</b><small>Send a message another rule can hear.</small></button></div><h3 class="choiceSection">Lights</h3><p class="small">React with a real light from this machine.</p><div class="choicegrid"><button onclick="chooseAction('light_on')"><b>Turn a light on</b><small>Use the light's normal on color.</small></button><button onclick="chooseAction('light_off')"><b>Turn a light off</b><small>Set the selected light to off.</small></button><button onclick="chooseAction('light_color')"><b>Set a light color</b><small>Choose a named or hex MPF color.</small></button><button onclick="chooseAction('light_fade')"><b>Fade a light</b><small>Smoothly change to a color over time.</small></button><button onclick="chooseAction('light_stop')"><b>Release a light</b><small>Stop holding this light so lower-priority lighting can show through.</small></button></div><div class="modalBtns"><button onclick="actionModal.style.display='none'">Cancel</button></div></div></div>
 <div id="editTriggerModal" class="modalbg"><div id="editTriggerBody" class="modal"></div></div>
 <div id="editActionModal" class="modalbg"><div id="editActionBody" class="modal"></div></div>
+<script src="vendor-js-yaml.min.js"></script>
+<script src="browser_adapter.js"></script>
 <script src="pinblocks_bundle.js"></script></body></html>

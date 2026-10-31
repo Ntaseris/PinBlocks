@@ -1,0 +1,11 @@
+{
+  "name": "pinblocks",
+  "version": "0.33.0-beta.1",
+  "private": true,
+  "description": "Visual MPF mode builder for desktop and browser",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "check": "node scripts/check.js",
+    "test": "npm run build && npm run check"
+  }
+}

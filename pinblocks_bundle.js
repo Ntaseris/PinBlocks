@@ -555,7 +555,7 @@ function renderRules(){let all=ws().rules||[],shown=all.map((r,i)=>({r,i}));let 
 <span><b>WHEN</b> left_ramp is made</span><span class="ruleFlow">THEN</span>
 <span><b>DO</b> score 5,000</span><span class="ruleFlow">AND</span>
 <span><b>DO</b> advance jackpot_counter</span>
-</div></div><div class=ruleSearchBar><button onclick="toggleRuleDensity()" ${all.length?'':'disabled title="Create a rule first"'}>${compactRules?'Comfortable':'Compact'} view</button><span>${all.length ? `${all.length} rule${all.length===1?'':'s'}` : 'No rules yet'}</span></div>${tutorialActive||!all.length?'':validationHtml()}${body||'<div class=hint><b>No rules yet.</b> Create your first WHEN → DO rule below.</div>'}${tutorialActive&&guidedLessonParts().rule?'':`<div class=wizardbox><h3>Add a rule</h3><button class=primary onclick="triggerModal.style.display='flex'">＋ Create Rule</button></div>`}${tutorialActive&&guidedState()?.step<4?'':`<button class=nextbtn onclick="view('test')">Next: Test Your Mode →</button>`}`}
+</div></div><div class=ruleSearchBar><button onclick="toggleRuleDensity()" ${all.length?'':'disabled title="Create a rule first"'}>${compactRules?'Comfortable':'Compact'} view</button><span>${all.length ? `${all.length} rule${all.length===1?'':'s'}` : 'No rules yet'}</span></div>${tutorialActive||!all.length?'':validationHtml()}${body||'<div class=hint><b>No rules yet.</b> Create your first WHEN → DO rule below.</div>'}${tutorialActive&&(guidedLessonParts().rule||guidedLessonParts().nearRule)?'':`<div class=wizardbox><h3>Add a rule</h3><button class=primary onclick="triggerModal.style.display='flex'">＋ Create Rule</button></div>`}${tutorialActive&&guidedState()?.step<4?'':`<button class=nextbtn onclick="view('test')">Next: Test Your Mode →</button>`}`}
 function summary(r){
  let trigger=triggerText(r.trigger).replace(/^WHEN\s+/,'');
  if(!r.actions.length)return`${trigger} → NEEDS AN ACTION`;
@@ -647,9 +647,10 @@ function guidedLessonParts(){
  let shot=shots[0]||'',counter=counters[0]||'',cd=counter?w.counters[counter]:null;
  let candidates=(w?.rules||[]).filter(r=>r.trigger?.type==='shot'&&r.trigger.value===shot);
  let rule=candidates.find(r=>r.actions?.some(x=>x.type==='score'&&Number(x.value)>0)&&r.actions?.some(x=>x.type==='advance_counter'&&x.value===counter))||candidates.find(r=>r.actions?.some(x=>x.type==='score'&&Number(x.value)>0))||candidates.find(r=>r.actions?.some(x=>x.type==='advance_counter'&&x.value===counter))||candidates[0];
+ let shotSwitch=shot?w.shots[shot]?.switch:'',nearRule=!rule&&shotSwitch?(w.rules||[]).find(r=>r.trigger?.type==='switch'&&r.trigger.value===shotSwitch):null;
  let hasAdvance=!!rule?.actions?.some(x=>x.type==='advance_counter'&&x.value===counter);
  let hasScore=!!rule?.actions?.some(x=>x.type==='score'&&Number(x.value)>0);
- return {w,shots,counters,shot,counter,cd,rule,hasAdvance,hasScore};
+ return {w,shots,counters,shot,counter,cd,rule,nearRule,hasAdvance,hasScore};
 }
 function guidedState(){
  if(!tutorialActive||!currentMode)return null;
@@ -657,6 +658,7 @@ function guidedState(){
  if(!p.shot)return {step:1,title:'Create one shot',text:'Setup is complete. Now create a Shot using a real target switch. This becomes the thing the player is trying to hit.',view:'components',target:'shot'};
  if(!p.counter)return {step:2,title:'Create the 3-hit goal',text:`Create one Count Up counter for ${p.shot}. For this lesson it must start at 0 and complete at 3.`,view:'components',target:'counter'};
  if(p.cd&&((p.cd.direction||'up')!=='up'||Number(p.cd.start)!==0||Number(p.cd.complete)!==3))return {step:2,title:'Fix the counter',text:`The lesson counter is currently ${p.cd.start} → ${p.cd.complete}. Edit ${p.counter} so it Counts Up from 0 and completes at 3.`,view:'components',target:'counterEdit'};
+ if(p.nearRule)return {step:3,title:'Change the switch to your shot',text:`Your actions are connected, but this rule currently starts from switch ${p.nearRule.trigger.value}. Click the highlighted Edit button, change Trigger Type to Shot made, choose ${p.shot}, and save.`,view:'rules',target:'fixRuleTrigger'};
  if(!p.rule)return {step:3,title:'Connect the gameplay',text:`Create one rule: WHEN ${p.shot} is made → score points AND advance ${p.counter}.`,view:'rules',target:'createRule'};
  if(!p.hasScore)return {step:3,title:'Add scoring',text:`Rule 1 is connected to ${p.shot}. Now add a Score points action to this same rule.`,view:'rules',target:'addScore'};
  if(!p.hasAdvance)return {step:3,title:'Advance the counter',text:`Scoring is connected. Add another action to this same rule and choose Advance a counter → ${p.counter}.`,view:'rules',target:'addCounter'};
@@ -687,6 +689,7 @@ function guidedHighlight(){
  if(g.target==='counter')el=buttons.find(x=>x.textContent.includes('Create Counter'));
  if(g.target==='counterEdit'){let p=guidedLessonParts(),card=[...document.querySelectorAll('.card')].find(x=>x.textContent.includes(p.counter));el=card?[...card.querySelectorAll('button')].find(x=>x.textContent.trim()==='Edit'):null}
  if(g.target==='createRule')el=buttons.find(x=>x.textContent.includes('Create Rule'));
+ if(g.target==='fixRuleTrigger'){let p=guidedLessonParts(),i=(p.w.rules||[]).indexOf(p.nearRule),card=document.querySelectorAll('.rule')[i];el=card?[...card.querySelectorAll('button')].find(x=>x.textContent.trim()==='Edit'):null}
  if(g.target==='addScore'||g.target==='addCounter'){let p=guidedLessonParts();el=buttons.find(x=>x.textContent.includes(p.rule?.actions?.length?'Add another action':'Add the first action'));}
  if(g.target==='test'){let p=guidedLessonParts();el=buttons.find(x=>x.classList.contains('testInput')&&x.textContent.includes('MAKE SHOT')&&x.textContent.includes(p.shot));}
  if(el){el.classList.add('guidedNext');el.title='Do this next';}

@@ -19,18 +19,19 @@
     Object.entries(obj).forEach(([k,v])=>{if(eventKeys.has(k)||k.endsWith('_events'))addEvents(v,out);walk(v,out)});
   }
   function readProject(files,name){
-    const items=Object.fromEntries(sections.map(s=>[s,new Set()])),modes=new Set(),events=new Set(),errors=[];
+    const items=Object.fromEntries(sections.map(s=>[s,new Set()])),modes=new Set(),registeredModes=new Set(),events=new Set(),errors=[];
     parsedFiles=[];
     for(const f of files){
       const path=cleanPath(f.path);if(!/\.ya?ml$/i.test(path))continue;
       if(!(/^config\//.test(path)||/^modes\/[^/]+\/config\//.test(path)))continue;
       let data={};try{data=window.jsyaml.load(f.text)||{};if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Top-level YAML is not a mapping')}catch(e){errors.push({file:path,error:e.message});continue}
       const mm=path.match(/^modes\/([^/]+)\/config\//);if(mm)modes.add(mm[1]);
+      if(/^config\/[^/]+\.ya?ml$/i.test(path)&&Array.isArray(data.modes))data.modes.forEach(m=>{if(typeof m==='string')registeredModes.add(m)});
       sections.forEach(s=>{if(data[s]&&typeof data[s]==='object'&&!Array.isArray(data[s]))Object.keys(data[s]).forEach(k=>items[s].add(String(k)))});
       walk(data,events);parsedFiles.push({path,text:f.text,data,mode:mm&&mm[1]});
     }
     if(!parsedFiles.length)throw new Error('No YAML found under config/ or modes/*/config/. Choose the root MPF game folder.');
-    const result={project:'browser',project_name:name||'MPF Browser Project',files_read:parsedFiles.length,counts:{},items:{},modes:[...modes].sort(),events:[...events].sort(),errors};
+    const result={project:'browser',project_name:name||'MPF Browser Project',files_read:parsedFiles.length,counts:{},items:{},modes:[...modes].sort(),registered_modes:[...registeredModes].sort(),events:[...events].sort(),errors};
     sections.forEach(s=>{result.items[s]=[...items[s]].sort();result.counts[s]=result.items[s].length});result.counts.modes=result.modes.length;result.counts.events_discovered=result.events.length;
     browserProject=result;return result;
   }
